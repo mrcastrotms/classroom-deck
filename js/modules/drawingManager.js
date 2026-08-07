@@ -10,9 +10,8 @@ export class DrawingManager {
     this.lineWidth = 4;
     this.eraserRadius = 24;
 
-    // Multi-touch tracking
     this.multiTouchEnabled = false;
-    this.activeTouches = new Map(); // Touch Identifier -> last {x, y}
+    this.activeTouches = new Map();
 
     this.init();
   }
@@ -28,23 +27,32 @@ export class DrawingManager {
     const rect = this.container.getBoundingClientRect();
     const dpr = window.devicePixelRatio || 1;
 
+    // High DPI Canvas Backing Store
     this.canvas.width = rect.width * dpr;
     this.canvas.height = rect.height * dpr;
 
     this.ctx.scale(dpr, dpr);
     this.canvas.style.width = `${rect.width}px`;
     this.canvas.style.height = `${rect.height}px`;
+
+    // Re-apply stroke properties after context resize
+    this.ctx.lineCap = "round";
+    this.ctx.lineJoin = "round";
   }
 
+  // Precise coordinate translation considering canvas scale & offsets
   getPointerPos(clientX, clientY) {
     const rect = this.canvas.getBoundingClientRect();
+    const scaleX = this.canvas.width / (rect.width * (window.devicePixelRatio || 1));
+    const scaleY = this.canvas.height / (rect.height * (window.devicePixelRatio || 1));
+
     return {
-      x: clientX - rect.left,
-      y: clientY - rect.top,
+      x: (clientX - rect.left) * scaleX,
+      y: (clientY - rect.top) * scaleY,
     };
   }
 
-  // --- Single Pointer / Mouse Handling ---
+  // --- Mouse Pointer Events ---
   startDrawing(e) {
     e.preventDefault();
     this.isDrawing = true;
@@ -78,7 +86,7 @@ export class DrawingManager {
     this.ctx.closePath();
   }
 
-  // --- Multi-Touch Handling (Up to 4 points) ---
+  // --- Touch Pointer Handling (Multi-touch robust) ---
   handleTouchStart(e) {
     e.preventDefault();
 
@@ -108,8 +116,6 @@ export class DrawingManager {
 
     touchesToProcess.forEach((touch) => {
       const lastPos = this.activeTouches.get(touch.identifier);
-      if (!lastPos) return;
-
       const currentPos = this.getPointerPos(touch.clientX, touch.clientY);
 
       if (this.mode === "erase") {
@@ -123,7 +129,11 @@ export class DrawingManager {
         this.ctx.lineWidth = this.lineWidth;
 
         this.ctx.beginPath();
-        this.ctx.moveTo(lastPos.x, lastPos.y);
+        if (lastPos) {
+          this.ctx.moveTo(lastPos.x, lastPos.y);
+        } else {
+          this.ctx.moveTo(currentPos.x, currentPos.y);
+        }
         this.ctx.lineTo(currentPos.x, currentPos.y);
         this.ctx.stroke();
       }
@@ -139,13 +149,11 @@ export class DrawingManager {
   }
 
   bindEvents() {
-    // Mouse events
     this.canvas.addEventListener("mousedown", (e) => this.startDrawing(e));
     this.canvas.addEventListener("mousemove", (e) => this.draw(e));
     this.canvas.addEventListener("mouseup", () => this.stopDrawing());
     this.canvas.addEventListener("mouseleave", () => this.stopDrawing());
 
-    // Touch events
     this.canvas.addEventListener("touchstart", (e) => this.handleTouchStart(e), { passive: false });
     this.canvas.addEventListener("touchmove", (e) => this.handleTouchMove(e), { passive: false });
     this.canvas.addEventListener("touchend", (e) => this.handleTouchEnd(e));

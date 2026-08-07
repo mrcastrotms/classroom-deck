@@ -1,5 +1,15 @@
-/* Header & Controls */
+/* Prevent full-page scroll/bounce on touch boards */
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  touch-action: none; /* Disables unwanted touch zooming/panning */
+}
+
+/* Header & Sticky Controls Bar */
 header {
+  position: relative;
+  z-index: 100; /* Stays above canvas and stage at all times */
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -28,6 +38,7 @@ header {
   display: flex;
   align-items: center;
   gap: 10px;
+  flex-wrap: wrap;
 }
 
 .segmented-control {
@@ -66,7 +77,6 @@ header {
   background: var(--border-color, #334155);
 }
 
-/* Active state for Multi Touch toggle */
 .active-mode {
   background: #38bdf8 !important;
   color: #000 !important;
@@ -92,48 +102,50 @@ header {
   cursor: pointer;
 }
 
-/* Stage Container & Preset Resizing */
+/* Main Container - Prevents Header Overlap */
 main {
   display: flex;
   justify-content: center;
-  align-items: center;
-  padding: 24px;
+  align-items: flex-start;
+  padding: 16px;
+  box-sizing: border-box;
   min-height: calc(100vh - 80px);
 }
 
 #stage {
+  position: relative;
   width: 1280px;
   max-width: 100%;
-  transition: all 0.35s ease;
   margin: 0 auto;
+  transition: width 0.3s ease, height 0.3s ease;
 }
 
 #stage.smartboard {
   width: 1280px;
-  aspect-ratio: 16 / 9;
+  max-width: 95vw;
 }
 
 #stage.mac {
   width: 1440px;
-  aspect-ratio: 16 / 10;
+  max-width: 95vw;
 }
 
 /* Canvas Overlay & Frame Styling */
 .content-frame {
   position: relative;
   width: 100%;
-  height: 100%;
-  min-height: 500px;
-  background: var(--bg-surface, #1e293b);
-  border: 1px solid var(--border-color, #334155);
+  height: 650px;
+  background: var(--bg-surface, #0f172a);
+  border: 2px solid var(--border-color, #475569);
   border-radius: 12px;
   overflow: hidden;
   display: flex;
   justify-content: center;
   align-items: center;
+  touch-action: none;
 }
 
-/* Math Grid overlay layer */
+/* HIGH CONTRAST Math Grid overlay layer */
 .grid-overlay {
   position: absolute;
   top: 0;
@@ -143,10 +155,9 @@ main {
   z-index: 2;
   pointer-events: none;
   background-image: 
-    linear-gradient(to right, rgba(255, 255, 255, 0.1) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+    linear-gradient(to right, rgba(56, 189, 248, 0.35) 1.5px, transparent 1.5px),
+    linear-gradient(to bottom, rgba(56, 189, 248, 0.35) 1.5px, transparent 1.5px);
   background-size: 40px 40px;
-  transition: opacity 0.2s ease;
 }
 
 .grid-overlay.hidden {
@@ -161,6 +172,7 @@ main {
   height: 100%;
   cursor: crosshair;
   z-index: 5;
+  touch-action: none;
 }
 
 #placeholder-text {
