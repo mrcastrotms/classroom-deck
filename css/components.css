@@ -1,4 +1,4 @@
-/* Layout & Header */
+/* Header & Controls */
 header {
   display: flex;
   justify-content: space-between;
@@ -27,7 +27,7 @@ header {
 .controls {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
 }
 
 .segmented-control {
@@ -64,6 +64,32 @@ header {
 
 .fs-btn:hover {
   background: var(--border-color, #334155);
+}
+
+/* Active state for Multi Touch toggle */
+.active-mode {
+  background: #38bdf8 !important;
+  color: #000 !important;
+  font-weight: 600;
+}
+
+/* Red Fullscreen active state */
+.btn-danger {
+  background-color: #ef4444 !important;
+  color: #ffffff !important;
+  border-color: #dc2626 !important;
+}
+
+/* Grid Selector */
+.grid-select {
+  background: var(--bg-dark, #0f172a);
+  color: var(--text-primary, #f8fafc);
+  border: none;
+  border-left: 1px solid var(--border-color, #334155);
+  padding: 6px 8px;
+  font-size: 0.85rem;
+  outline: none;
+  cursor: pointer;
 }
 
 /* Stage Container & Preset Resizing */
@@ -105,6 +131,26 @@ main {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+/* Math Grid overlay layer */
+.grid-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+  background-size: 40px 40px;
+  transition: opacity 0.2s ease;
+}
+
+.grid-overlay.hidden {
+  display: none;
 }
 
 #draw-canvas {

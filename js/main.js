@@ -2,11 +2,11 @@ import { ViewportManager } from "./modules/viewportManager.js";
 import { DrawingManager } from "./modules/drawingManager.js";
 
 document.addEventListener("DOMContentLoaded", () => {
-  // Elements
   const stage = document.getElementById("stage");
   const contentFrame = document.getElementById("content-frame");
   const canvas = document.getElementById("draw-canvas");
   const placeholderText = document.getElementById("placeholder-text");
+  const gridOverlay = document.getElementById("grid-overlay");
 
   const viewTitle = document.getElementById("view-title");
   const viewDimensions = document.getElementById("view-dimensions");
@@ -23,7 +23,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const btnToggleContent = document.getElementById("btn-toggle-content");
   const penColor = document.getElementById("pen-color");
 
-  // Init Viewport Manager
+  const toggleMultiTouch = document.getElementById("toggle-multitouch");
+  const btnToggleGrid = document.getElementById("btn-toggle-grid");
+  const selectGridSize = document.getElementById("select-grid-size");
+
   const viewport = new ViewportManager(
     stage,
     viewTitle,
@@ -32,15 +35,11 @@ document.addEventListener("DOMContentLoaded", () => {
     telemetryFs
   );
 
-  // Init Drawing Manager safely
   let drawer = null;
   if (canvas && contentFrame) {
     drawer = new DrawingManager(canvas, contentFrame);
-  } else {
-    console.warn("Canvas or contentFrame element not found in DOM.");
   }
 
-  // Preset switch handler
   const handlePresetChange = (preset) => {
     viewport.setPreset(preset);
     if (drawer) {
@@ -65,7 +64,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Drawing tool bindings
+  // Drawing tools
   if (toolDraw) {
     toolDraw.addEventListener("click", () => {
       if (drawer) drawer.setMode("draw");
@@ -90,6 +89,42 @@ document.addEventListener("DOMContentLoaded", () => {
     btnClear.addEventListener("click", () => drawer.clearCanvas());
   }
 
+  // Multi touch toggle
+  let isMultiTouchActive = false;
+  if (toggleMultiTouch) {
+    toggleMultiTouch.addEventListener("click", () => {
+      isMultiTouchActive = !isMultiTouchActive;
+      if (drawer) drawer.setMultiTouch(isMultiTouchActive);
+
+      toggleMultiTouch.textContent = `Multi Touch: ${isMultiTouchActive ? "ON" : "OFF"}`;
+      toggleMultiTouch.classList.toggle("active-mode", isMultiTouchActive);
+    });
+  }
+
+  // Grid toggle and size selection
+  let isGridActive = false;
+  const updateGridStyle = () => {
+    if (!gridOverlay || !selectGridSize) return;
+    const size = selectGridSize.value;
+    gridOverlay.style.backgroundSize = `${size}px ${size}px`;
+  };
+
+  if (btnToggleGrid) {
+    btnToggleGrid.addEventListener("click", () => {
+      isGridActive = !isGridActive;
+      if (gridOverlay) gridOverlay.classList.toggle("hidden", !isGridActive);
+      btnToggleGrid.textContent = `Grid: ${isGridActive ? "ON" : "OFF"}`;
+      btnToggleGrid.classList.toggle("active", isGridActive);
+      updateGridStyle();
+    });
+  }
+
+  if (selectGridSize) {
+    selectGridSize.addEventListener("change", () => {
+      updateGridStyle();
+    });
+  }
+
   // Toggle placeholder text
   if (btnToggleContent) {
     btnToggleContent.addEventListener("click", () => {
@@ -97,7 +132,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Fullscreen binding
+  // Fullscreen binding & state styling
   if (btnFullscreen) {
     btnFullscreen.addEventListener("click", () => viewport.toggleFullscreen());
   }
@@ -105,6 +140,11 @@ document.addEventListener("DOMContentLoaded", () => {
   document.addEventListener("fullscreenchange", () => {
     const isFs = !!document.fullscreenElement;
     viewport.updateFullscreenState(isFs);
+
+    if (btnFullscreen) {
+      btnFullscreen.classList.toggle("btn-danger", isFs);
+    }
+
     if (drawer) {
       setTimeout(() => drawer.resizeCanvas(), 350);
     }
