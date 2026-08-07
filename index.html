@@ -4,186 +4,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>The Mayan School - Presentation Deck</title>
-    <style>
-      :root {
-        --bg-main: #0f172a;
-        --bg-panel: #1e293b;
-        --border: #334155;
-        --accent: #38bdf8;
-        --text: #f8fafc;
-        --text-muted: #94a3b8;
-      }
-
-      * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-        user-select: none;
-      }
-
-      body {
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-          sans-serif;
-        background-color: var(--bg-main);
-        color: var(--text);
-        height: 100vh;
-        display: flex;
-        flex-direction: column;
-        overflow: hidden;
-      }
-
-      /* Top Control Bar */
-      header {
-        background: #090d16;
-        border-bottom: 1px solid var(--border);
-        padding: 12px 20px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        z-index: 10;
-      }
-
-      .brand {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        font-size: 0.85rem;
-      }
-
-      .brand strong {
-        color: #f59e0b;
-        letter-spacing: 0.05em;
-      }
-
-      .brand span {
-        color: var(--text-muted);
-        border-left: 1px solid var(--border);
-        padding-left: 12px;
-      }
-
-      /* Hierarchy Control Group */
-      .controls {
-        display: flex;
-        align-items: center;
-        gap: 16px;
-      }
-
-      .segmented-control {
-        display: flex;
-        background: var(--bg-main);
-        border: 1px solid var(--border);
-        border-radius: 8px;
-        padding: 3px;
-      }
-
-      .toggle-btn {
-        background: transparent;
-        border: none;
-        color: var(--text-muted);
-        padding: 6px 14px;
-        font-size: 0.8rem;
-        font-weight: 600;
-        border-radius: 6px;
-        cursor: pointer;
-        transition: all 0.2s ease;
-      }
-
-      .toggle-btn.active {
-        background: var(--accent);
-        color: #0f172a;
-      }
-
-      .fs-btn {
-        background: var(--bg-panel);
-        border: 1px solid var(--border);
-        color: var(--text);
-        padding: 6px 14px;
-        font-size: 0.8rem;
-        font-weight: 600;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: all 0.2s ease;
-      }
-
-      .fs-btn:hover {
-        border-color: var(--accent);
-      }
-
-      .fs-btn.active {
-        background: #ef4444;
-        border-color: #ef4444;
-        color: white;
-      }
-
-      /* Stage Canvas Workspace */
-      main {
-        flex: 1;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: #020617;
-        padding: 20px;
-        position: relative;
-      }
-
-      #stage {
-        background: var(--bg-panel);
-        border: 2px dashed var(--border);
-        border-radius: 12px;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        padding: 32px;
-        position: relative;
-        transition: width 0.3s ease, height 0.3s ease, transform 0.3s ease;
-        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
-      }
-
-      /* Fullscreen State Override */
-      #stage.fullscreen-mode {
-        width: 100% !important;
-        height: 100% !important;
-        border: none;
-        border-radius: 0;
-        transform: none !important;
-      }
-
-      /* Content Area Frame */
-      .content-frame {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        border: 1px solid var(--border);
-        border-radius: 8px;
-        background: var(--bg-main);
-        padding: 20px;
-        text-align: center;
-      }
-
-      .viewport-badge {
-        font-family: monospace;
-        font-size: 1.5rem;
-        color: var(--accent);
-        margin-top: 10px;
-      }
-
-      /* Telemetry Bar */
-      footer {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding-top: 16px;
-        border-top: 1px solid var(--border);
-        font-family: monospace;
-        font-size: 0.75rem;
-        color: var(--text-muted);
-      }
-    </style>
+    
+    <link rel="stylesheet" href="css/variables.css" />
+    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/components.css" />
   </head>
   <body>
-    <!-- Header Control Bar -->
     <header>
       <div class="brand">
         <strong>THE MAYAN SCHOOL</strong>
@@ -191,145 +17,33 @@
       </div>
 
       <div class="controls">
-        <!-- Step 1: Select Target Device -->
         <div class="segmented-control">
-          <button id="toggle-mac" class="toggle-btn active">Mac View</button>
-          <button id="toggle-smartboard" class="toggle-btn">
+          <button id="toggle-mac" class="toggle-btn">Mac View</button>
+          <button id="toggle-smartboard" class="toggle-btn active">
             LG Smartboard
           </button>
         </div>
-
-        <!-- Step 2: Toggle Fullscreen Mode -->
         <button id="btn-fullscreen" class="fs-btn">⛶ Fullscreen</button>
       </div>
     </header>
 
-    <!-- Main Viewport Stage -->
     <main>
       <div id="stage">
-        <!-- Slide Content Workspace -->
         <div class="content-frame">
-          <h2 id="view-title">Mac Viewport Active</h2>
-          <div class="viewport-badge" id="view-dimensions">2148 × 1127</div>
-          <p
-            style="
-              color: var(--text-muted);
-              font-size: 0.85rem;
-              margin-top: 12px;
-            "
-          >
+          <h2 id="view-title">LG Smartboard</h2>
+          <div class="viewport-badge" id="view-dimensions">1280 × 720</div>
+          <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 12px;">
             Build or populate content here. Toggle views to test scaling.
           </p>
         </div>
 
-        <!-- Telemetry Footer -->
         <footer>
-          <span id="telemetry-preset">Preset: Mac (2148x1127)</span>
-          <span id="telemetry-fs">Fullscreen: Off</span>
+          <span id="telemetry-preset">Preset: LG Smartboard</span>
+          <span id="telemetry-fs">Fullscreen: OFF</span>
         </footer>
       </div>
     </main>
 
-    <script>
-      // State Machine Definitions
-      const PRESETS = {
-        MAC: {
-          width: 2148,
-          height: 1127,
-          scale: 0.42,
-          name: "Mac Viewport (2148×1127)",
-        },
-        SMARTBOARD: {
-          width: 1280,
-          height: 720,
-          scale: 0.85,
-          name: "LG Smartboard (1280×720 @3x)",
-        },
-      };
-
-      let activePreset = "MAC";
-      let isFullscreen = false;
-
-      // DOM Elements
-      const stage = document.getElementById("stage");
-      const toggleMac = document.getElementById("toggle-mac");
-      const toggleSmartboard = document.getElementById("toggle-smartboard");
-      const btnFullscreen = document.getElementById("btn-fullscreen");
-
-      const viewTitle = document.getElementById("view-title");
-      const viewDimensions = document.getElementById("view-dimensions");
-      const telemetryPreset = document.getElementById("telemetry-preset");
-      const telemetryFs = document.getElementById("telemetry-fs");
-
-      // Render Function
-      function renderState() {
-        const config = PRESETS[activePreset];
-
-        // Update Active Toggle State
-        toggleMac.classList.toggle("active", activePreset === "MAC");
-        toggleSmartboard.classList.toggle(
-          "active",
-          activePreset === "SMARTBOARD"
-        );
-
-        // Apply Dimensions & Scale when NOT in Fullscreen
-        if (!isFullscreen) {
-          stage.classList.remove("fullscreen-mode");
-          stage.style.width = `${config.width}px`;
-          stage.style.height = `${config.height}px`;
-          stage.style.transform = `scale(${config.scale})`;
-        } else {
-          stage.classList.add("fullscreen-mode");
-        }
-
-        // Update On-Screen Labels
-        viewTitle.textContent = config.name;
-        viewDimensions.textContent = `${config.width} × ${config.height}`;
-        telemetryPreset.textContent = `Preset: ${config.name}`;
-        telemetryFs.textContent = `Fullscreen: ${
-          isFullscreen ? "ACTIVE" : "OFF"
-        }`;
-        btnFullscreen.classList.toggle("active", isFullscreen);
-        btnFullscreen.textContent = isFullscreen
-          ? "🗗 Exit Fullscreen"
-          : "⛶ Fullscreen";
-      }
-
-      // Step 1: Select View
-      toggleMac.addEventListener("click", () => {
-        activePreset = "MAC";
-        renderState();
-      });
-
-      toggleSmartboard.addEventListener("click", () => {
-        activePreset = "SMARTBOARD";
-        renderState();
-      });
-
-      // Step 2: Toggle Fullscreen
-      btnFullscreen.addEventListener("click", () => {
-        if (!document.fullscreenElement) {
-          document.documentElement
-            .requestFullscreen()
-            .then(() => {
-              isFullscreen = true;
-              renderState();
-            })
-            .catch((err) => alert(`Error entering fullscreen: ${err.message}`));
-        } else {
-          document.exitFullscreen();
-        }
-      });
-
-      // Revert state if exited via ESC key
-      document.addEventListener("fullscreenchange", () => {
-        isFullscreen = !!document.fullscreenElement;
-        renderState();
-      });
-
-      // Initial Render
-      renderState();
-    </script>
+    <script type="module" src="js/main.js"></script>
   </body>
 </html>
-
