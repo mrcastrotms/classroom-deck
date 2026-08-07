@@ -1,8 +1,13 @@
 import { ViewportManager } from "./modules/viewportManager.js";
+import { DrawingManager } from "./modules/drawingManager.js";
 
 document.addEventListener("DOMContentLoaded", () => {
-  // DOM References
+  // Elements
   const stage = document.getElementById("stage");
+  const contentFrame = document.getElementById("content-frame");
+  const canvas = document.getElementById("draw-canvas");
+  const placeholderText = document.getElementById("placeholder-text");
+
   const viewTitle = document.getElementById("view-title");
   const viewDimensions = document.getElementById("view-dimensions");
   const telemetryPreset = document.getElementById("telemetry-preset");
@@ -12,8 +17,14 @@ document.addEventListener("DOMContentLoaded", () => {
   const toggleSmartboard = document.getElementById("toggle-smartboard");
   const btnFullscreen = document.getElementById("btn-fullscreen");
 
-  // Initialize Manager
-  const manager = new ViewportManager(
+  const toolDraw = document.getElementById("tool-draw");
+  const toolErase = document.getElementById("tool-erase");
+  const btnClear = document.getElementById("btn-clear");
+  const btnToggleContent = document.getElementById("btn-toggle-content");
+  const penColor = document.getElementById("pen-color");
+
+  // Init Managers
+  const viewport = new ViewportManager(
     stage,
     viewTitle,
     viewDimensions,
@@ -21,30 +32,53 @@ document.addEventListener("DOMContentLoaded", () => {
     telemetryFs
   );
 
-  // Event Listeners
+  const drawer = new DrawingManager(canvas, contentFrame);
+
+  // Resize canvas when switching device resolutions
+  const handlePresetChange = (preset) => {
+    viewport.setPreset(preset);
+    setTimeout(() => drawer.resizeCanvas(), 350); // wait for CSS scaling transition
+  };
+
   toggleMac.addEventListener("click", () => {
-    manager.setPreset("MAC");
+    handlePresetChange("MAC");
     toggleMac.classList.add("active");
     toggleSmartboard.classList.remove("active");
   });
 
   toggleSmartboard.addEventListener("click", () => {
-    manager.setPreset("SMARTBOARD");
+    handlePresetChange("SMARTBOARD");
     toggleSmartboard.classList.add("active");
     toggleMac.classList.remove("active");
   });
 
-  btnFullscreen.addEventListener("click", () => {
-    manager.toggleFullscreen();
+  // Tool bindings
+  toolDraw.addEventListener("click", () => {
+    drawer.setMode("draw");
+    toolDraw.classList.add("active");
+    toolErase.classList.remove("active");
   });
+
+  toolErase.addEventListener("click", () => {
+    drawer.setMode("erase");
+    toolErase.classList.add("active");
+    toolDraw.classList.remove("active");
+  });
+
+  penColor.addEventListener("input", (e) => drawer.setColor(e.target.value));
+  btnClear.addEventListener("click", () => drawer.clearCanvas());
+
+  // Hide placeholder content toggle
+  btnToggleContent.addEventListener("click", () => {
+    placeholderText.classList.toggle("hidden");
+  });
+
+  // Fullscreen toggle
+  btnFullscreen.addEventListener("click", () => viewport.toggleFullscreen());
 
   document.addEventListener("fullscreenchange", () => {
     const isFs = !!document.fullscreenElement;
-    manager.updateFullscreenState(isFs);
-    btnFullscreen.classList.toggle("active", isFs);
-    btnFullscreen.textContent = isFs ? "🗗 Exit Fullscreen" : "⛶ Fullscreen";
+    viewport.updateFullscreenState(isFs);
+    setTimeout(() => drawer.resizeCanvas(), 350);
   });
-
-  // Initial render
-  manager.render();
 });
