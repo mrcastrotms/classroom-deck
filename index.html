@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>The Mayan School - Math</title>
+    <title>Math - Classroom Deck</title>
     
     <link rel="stylesheet" href="css/variables.css" />
     <link rel="stylesheet" href="css/base.css" />
@@ -17,24 +17,39 @@
       </div>
 
       <div class="controls">
+        <!-- Viewport Controls -->
         <div class="segmented-control">
           <button id="toggle-mac" class="toggle-btn">Mac View</button>
-          <button id="toggle-smartboard" class="toggle-btn active">
-            LG Smartboard
-          </button>
+          <button id="toggle-smartboard" class="toggle-btn active">LG Smartboard</button>
         </div>
+
+        <!-- Drawing Tools -->
+        <div class="segmented-control">
+          <button id="tool-draw" class="toggle-btn active">✏️ Draw</button>
+          <button id="tool-erase" class="toggle-btn">🧹 Erase</button>
+          <input type="color" id="pen-color" value="#38bdf8" title="Pick Color" class="color-picker" />
+        </div>
+
+        <button id="btn-clear" class="fs-btn">🗑️ Clear</button>
+        <button id="btn-toggle-content" class="fs-btn">👁️ Toggle Text</button>
         <button id="btn-fullscreen" class="fs-btn">⛶ Fullscreen</button>
       </div>
     </header>
 
     <main>
       <div id="stage">
-        <div class="content-frame">
-          <h2 id="view-title">LG Smartboard</h2>
-          <div class="viewport-badge" id="view-dimensions">1280 × 720</div>
-          <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 12px;">
-            Build or populate content here. Toggle views to test scaling.
-          </p>
+        <!-- Content Layer -->
+        <div class="content-frame" id="content-frame">
+          <div id="placeholder-text">
+            <h2 id="view-title">LG Smartboard</h2>
+            <div class="viewport-badge" id="view-dimensions">1280 × 720</div>
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 12px;">
+              Hold left click / long touch to quickly erase.
+            </p>
+          </div>
+
+          <!-- Canvas element -->
+          <canvas id="draw-canvas"></canvas>
         </div>
 
         <footer>

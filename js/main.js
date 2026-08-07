@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const btnToggleContent = document.getElementById("btn-toggle-content");
   const penColor = document.getElementById("pen-color");
 
-  // Init Managers
+  // Init Viewport Manager
   const viewport = new ViewportManager(
     stage,
     viewTitle,
@@ -32,53 +32,81 @@ document.addEventListener("DOMContentLoaded", () => {
     telemetryFs
   );
 
-  const drawer = new DrawingManager(canvas, contentFrame);
+  // Init Drawing Manager safely
+  let drawer = null;
+  if (canvas && contentFrame) {
+    drawer = new DrawingManager(canvas, contentFrame);
+  } else {
+    console.warn("Canvas or contentFrame element not found in DOM.");
+  }
 
-  // Resize canvas when switching device resolutions
+  // Preset switch handler
   const handlePresetChange = (preset) => {
     viewport.setPreset(preset);
-    setTimeout(() => drawer.resizeCanvas(), 350); // wait for CSS scaling transition
+    if (drawer) {
+      setTimeout(() => drawer.resizeCanvas(), 350);
+    }
   };
 
-  toggleMac.addEventListener("click", () => {
-    handlePresetChange("MAC");
-    toggleMac.classList.add("active");
-    toggleSmartboard.classList.remove("active");
-  });
+  // Viewport bindings
+  if (toggleMac) {
+    toggleMac.addEventListener("click", () => {
+      handlePresetChange("MAC");
+      toggleMac.classList.add("active");
+      if (toggleSmartboard) toggleSmartboard.classList.remove("active");
+    });
+  }
 
-  toggleSmartboard.addEventListener("click", () => {
-    handlePresetChange("SMARTBOARD");
-    toggleSmartboard.classList.add("active");
-    toggleMac.classList.remove("active");
-  });
+  if (toggleSmartboard) {
+    toggleSmartboard.addEventListener("click", () => {
+      handlePresetChange("SMARTBOARD");
+      toggleSmartboard.classList.add("active");
+      if (toggleMac) toggleMac.classList.remove("active");
+    });
+  }
 
-  // Tool bindings
-  toolDraw.addEventListener("click", () => {
-    drawer.setMode("draw");
-    toolDraw.classList.add("active");
-    toolErase.classList.remove("active");
-  });
+  // Drawing tool bindings
+  if (toolDraw) {
+    toolDraw.addEventListener("click", () => {
+      if (drawer) drawer.setMode("draw");
+      toolDraw.classList.add("active");
+      if (toolErase) toolErase.classList.remove("active");
+    });
+  }
 
-  toolErase.addEventListener("click", () => {
-    drawer.setMode("erase");
-    toolErase.classList.add("active");
-    toolDraw.classList.remove("active");
-  });
+  if (toolErase) {
+    toolErase.addEventListener("click", () => {
+      if (drawer) drawer.setMode("erase");
+      toolErase.classList.add("active");
+      if (toolDraw) toolDraw.classList.remove("active");
+    });
+  }
 
-  penColor.addEventListener("input", (e) => drawer.setColor(e.target.value));
-  btnClear.addEventListener("click", () => drawer.clearCanvas());
+  if (penColor && drawer) {
+    penColor.addEventListener("input", (e) => drawer.setColor(e.target.value));
+  }
 
-  // Hide placeholder content toggle
-  btnToggleContent.addEventListener("click", () => {
-    placeholderText.classList.toggle("hidden");
-  });
+  if (btnClear && drawer) {
+    btnClear.addEventListener("click", () => drawer.clearCanvas());
+  }
 
-  // Fullscreen toggle
-  btnFullscreen.addEventListener("click", () => viewport.toggleFullscreen());
+  // Toggle placeholder text
+  if (btnToggleContent) {
+    btnToggleContent.addEventListener("click", () => {
+      if (placeholderText) placeholderText.classList.toggle("hidden");
+    });
+  }
+
+  // Fullscreen binding
+  if (btnFullscreen) {
+    btnFullscreen.addEventListener("click", () => viewport.toggleFullscreen());
+  }
 
   document.addEventListener("fullscreenchange", () => {
     const isFs = !!document.fullscreenElement;
     viewport.updateFullscreenState(isFs);
-    setTimeout(() => drawer.resizeCanvas(), 350);
+    if (drawer) {
+      setTimeout(() => drawer.resizeCanvas(), 350);
+    }
   });
 });
