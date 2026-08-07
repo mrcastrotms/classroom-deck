@@ -1,0 +1,12 @@
+:root {
+  --bg-main: #0f172a;
+  --bg-panel: #1e293b;
+  --border: #334155;
+  --accent: #38bdf8;
+  --brand: #f59e0b;
+  --danger: #ef4444;
+  --text: #f8fafc;
+  --text-muted: #94a3b8;
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
