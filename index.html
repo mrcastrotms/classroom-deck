@@ -22,21 +22,30 @@
       </div>
     </div>
 
-    <!-- 2. 5TH GRADE LOCKED VIEW -->
+<!-- 2. 5TH GRADE LOCKED VIEW -->
     <div id="fifth-grade-view" class="app-view hidden">
       <header class="locked-header">
         <div class="brand">
           <strong>THE MAYAN SCHOOL</strong>
           <span>5TH GRADE MATH</span>
         </div>
+
+        <!-- NEW: Assignment Toolbar -->
+        <div class="controls">
+            <div class="segmented-control" style="background: rgba(0,0,0,0.2); border-color: rgba(255,255,255,0.2);">
+                <button id="btn-load-122" class="toggle-btn active" style="color: white;" type="button">1.2.2 (Operations)</button>
+                <button id="btn-load-123" class="toggle-btn" style="color: white;" type="button">1.2.3 (Word Form)</button>
+            </div>
+        </div>
+
         <div id="timer-display" class="timer">25:00</div>
         <!-- Hidden button for admin unlock (top right corner) -->
         <button id="btn-admin-unlock" class="admin-hidden-btn"></button>
       </header>
-      <main class="locked-content">
-        <!-- Additional student code/widgets go here -->
-        <h2>Focus Mode Active</h2>
-        <p>Complete your assignment. This device is temporarily locked.</p>
+      
+      <!-- Content Container for the Notebooks -->
+      <main id="fifth-grade-content" class="locked-content" style="padding: 0; display: block; overflow: hidden;">
+        <!-- JS will inject the assignment HTML here -->
       </main>
     </div>
 
