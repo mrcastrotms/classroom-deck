@@ -2,6 +2,23 @@ import { ViewportManager } from "./modules/viewportManager.js";
 import { DrawingManager } from "./modules/drawingManager.js";
 
 document.addEventListener("DOMContentLoaded", () => {
+  // ==========================================
+  // SPA & VIEW ROUTING ELEMENTS
+  // ==========================================
+  const viewLanding = document.getElementById("landing-view");
+  const viewWhiteboard = document.getElementById("whiteboard-view");
+  const viewFifthGrade = document.getElementById("fifth-grade-view");
+
+  const btnNav5th = document.getElementById("btn-nav-5th");
+  const btnNavWhiteboard = document.getElementById("btn-nav-whiteboard");
+  const btnExitWhiteboard = document.getElementById("btn-exit-whiteboard");
+
+  const timerDisplay = document.getElementById("timer-display");
+  const btnAdminUnlock = document.getElementById("btn-admin-unlock");
+
+  // ==========================================
+  // EXISTING WHITEBOARD ELEMENTS
+  // ==========================================
   const stage = document.getElementById("stage");
   const contentFrame = document.getElementById("content-frame");
   const canvas = document.getElementById("draw-canvas");
@@ -27,6 +44,99 @@ document.addEventListener("DOMContentLoaded", () => {
   const btnToggleGrid = document.getElementById("btn-toggle-grid");
   const selectGridSize = document.getElementById("select-grid-size");
 
+  // ==========================================
+  // SPA NAVIGATION & LOCKDOWN LOGIC
+  // ==========================================
+  let drawer = null; // Declare early so SPA can resize it
+  let timerInterval = null;
+
+  const switchView = (viewName) => {
+    // Hide all
+    [viewLanding, viewWhiteboard, viewFifthGrade].forEach((v) => {
+      if (v) {
+        v.classList.remove("active");
+        v.classList.add("hidden");
+      }
+    });
+
+    // Show Target
+    if (viewName === "landing" && viewLanding) {
+      viewLanding.classList.remove("hidden");
+      viewLanding.classList.add("active");
+    } else if (viewName === "whiteboard" && viewWhiteboard) {
+      viewWhiteboard.classList.remove("hidden");
+      viewWhiteboard.classList.add("active");
+      // Give the DOM a tiny fraction of a second to render 'display: flex' before resizing canvas
+      if (drawer) {
+        setTimeout(() => drawer.resizeCanvas(), 50);
+      }
+    } else if (viewName === "fifthGrade" && viewFifthGrade) {
+      viewFifthGrade.classList.remove("hidden");
+      viewFifthGrade.classList.add("active");
+    }
+  };
+
+  if (btnNavWhiteboard) {
+    btnNavWhiteboard.addEventListener("click", () => switchView("whiteboard"));
+  }
+
+  if (btnExitWhiteboard) {
+    btnExitWhiteboard.addEventListener("click", () => switchView("landing"));
+  }
+
+  // 5th Grade Lock & Timer
+  if (btnNav5th) {
+    btnNav5th.addEventListener("click", () => {
+      switchView("fifthGrade");
+
+      // 1. Force Fullscreen
+      const docEl = document.documentElement;
+      if (docEl.requestFullscreen) {
+        docEl.requestFullscreen().catch((err) => console.log("Fullscreen denied", err));
+      }
+
+      // 2. Start 25 Minute Timer
+      let timeRemaining = 25 * 60; // 1500 seconds
+      if (timerDisplay) timerDisplay.textContent = "25:00";
+
+      clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        timeRemaining--;
+        const minutes = Math.floor(timeRemaining / 60);
+        const seconds = timeRemaining % 60;
+        
+        if (timerDisplay) {
+          timerDisplay.textContent = `${minutes}:${seconds.toString().padStart(2, "0")}`;
+        }
+
+        if (timeRemaining <= 0) {
+          clearInterval(timerInterval);
+          if (timerDisplay) timerDisplay.textContent = "TIME UP";
+        }
+      }, 1000);
+    });
+  }
+
+  // Admin Unlock (Invisible top-right corner)
+  if (btnAdminUnlock) {
+    btnAdminUnlock.addEventListener("click", () => {
+      const code = prompt("Enter Admin Code to exit lockdown:");
+      if (code === "0801") {
+        clearInterval(timerInterval);
+        if (document.exitFullscreen && document.fullscreenElement) {
+          document.exitFullscreen();
+        }
+        switchView("landing");
+      } else if (code !== null) {
+        alert("Incorrect code.");
+      }
+    });
+  }
+
+
+  // ==========================================
+  // EXISTING WHITEBOARD MANAGERS & LOGIC
+  // ==========================================
   const viewport = new ViewportManager(
     stage,
     viewTitle,
@@ -35,7 +145,6 @@ document.addEventListener("DOMContentLoaded", () => {
     telemetryFs
   );
 
-  let drawer = null;
   if (canvas && contentFrame) {
     drawer = new DrawingManager(canvas, contentFrame);
   }
