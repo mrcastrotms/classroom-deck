@@ -1,5 +1,7 @@
 import { ViewportManager } from "./modules/viewportManager.js";
 import { DrawingManager } from "./modules/drawingManager.js";
+// NEW: Import the assignments from your decoupled module
+import { assignment122, assignment123 } from "./modules/assignments.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   // ==========================================
@@ -22,6 +24,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const btnSubmitPin = document.getElementById("btn-submit-pin");
   const btnReturnFullscreen = document.getElementById("btn-return-fullscreen");
   const pinError = document.getElementById("pin-error");
+
+  // 5th Grade Content Elements
+  const fifthGradeContent = document.getElementById("fifth-grade-content");
+  const btnLoad122 = document.getElementById("btn-load-122");
+  const btnLoad123 = document.getElementById("btn-load-123");
 
   // ==========================================
   // EXISTING WHITEBOARD ELEMENTS
@@ -93,11 +100,33 @@ document.addEventListener("DOMContentLoaded", () => {
     btnExitWhiteboard.addEventListener("click", () => switchView("landing"));
   }
 
+  // --- 5TH GRADE ASSIGNMENT TOGGLES ---
+  const loadAssignment = (assignmentHtml, activeBtn) => {
+    if (fifthGradeContent) {
+      fifthGradeContent.innerHTML = assignmentHtml;
+    }
+    // Manage active states
+    if (btnLoad122) btnLoad122.classList.remove("active");
+    if (btnLoad123) btnLoad123.classList.remove("active");
+    if (activeBtn) activeBtn.classList.add("active");
+  };
+
+  if (btnLoad122) {
+    btnLoad122.addEventListener("click", () => loadAssignment(assignment122, btnLoad122));
+  }
+
+  if (btnLoad123) {
+    btnLoad123.addEventListener("click", () => loadAssignment(assignment123, btnLoad123));
+  }
+
   // --- 5TH GRADE LOCKDOWN START ---
   if (btnNav5th) {
     btnNav5th.addEventListener("click", () => {
       switchView("fifthGrade");
       isFifthGradeLocked = true; 
+
+      // Load Assignment 1.2.2 by default
+      loadAssignment(assignment122, btnLoad122);
 
       // 1. Force Fullscreen
       const docEl = document.documentElement;
