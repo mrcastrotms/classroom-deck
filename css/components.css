@@ -213,3 +213,123 @@ footer {
   font-size: 0.75rem;
   color: var(--text-muted, #94a3b8);
 }
+
+/* =========================================
+   NEW SPA & VIEW ROUTING STYLES
+   ========================================= */
+
+/* Hides and shows the different "pages" */
+.app-view {
+  display: none;
+  width: 100vw;
+  height: 100vh;
+}
+
+.app-view.active {
+  display: flex;
+  flex-direction: column;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* --- Landing View --- */
+#landing-view {
+  justify-content: center;
+  align-items: center;
+  background-color: var(--bg-dark, #0f172a);
+}
+
+.landing-card {
+  text-align: center;
+  padding: 3rem;
+  background: var(--bg-surface, #1e293b);
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  border: 1px solid var(--border-color, #334155);
+}
+
+.landing-card h1 {
+  color: var(--text-primary, #f8fafc);
+  margin-bottom: 0.5rem;
+}
+
+.landing-card p {
+  color: var(--text-muted, #94a3b8);
+  margin-bottom: 2rem;
+}
+
+.landing-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.primary-btn {
+  background-color: var(--accent-blue, #38bdf8);
+  color: #0f172a;
+  font-weight: bold;
+  border: none;
+}
+
+.primary-btn:hover {
+  background-color: #0ea5e9;
+}
+
+.exit-btn {
+  border-color: #ef4444;
+  color: #ef4444;
+}
+
+.exit-btn:hover {
+  background-color: #ef4444;
+  color: #ffffff;
+}
+
+/* --- 5th Grade Locked View --- */
+.locked-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 24px;
+  background-color: #ef4444; /* Red header to strongly indicate locked state */
+  color: #ffffff;
+  position: relative;
+}
+
+.locked-header .brand strong,
+.locked-header .brand span {
+  color: #ffffff;
+}
+
+.timer {
+  font-size: 2rem;
+  font-family: monospace;
+  font-weight: bold;
+  letter-spacing: 2px;
+}
+
+/* Invisible button in the top right corner for admin unlock */
+.admin-hidden-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 60px;
+  height: 60px;
+  opacity: 0; 
+  cursor: default;
+  border: none;
+  background: transparent;
+  z-index: 999;
+}
+
+.locked-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--bg-dark, #0f172a);
+  color: var(--text-primary, #f8fafc);
+}
