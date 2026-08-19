@@ -218,7 +218,6 @@ footer {
    NEW SPA & VIEW ROUTING STYLES
    ========================================= */
 
-/* Hides and shows the different "pages" */
 .app-view {
   display: none;
   width: 100vw;
@@ -271,6 +270,10 @@ footer {
   color: #0f172a;
   font-weight: bold;
   border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
 }
 
 .primary-btn:hover {
@@ -293,7 +296,7 @@ footer {
   justify-content: space-between;
   align-items: center;
   padding: 12px 24px;
-  background-color: #ef4444; /* Red header to strongly indicate locked state */
+  background-color: #ef4444;
   color: #ffffff;
   position: relative;
 }
@@ -310,7 +313,6 @@ footer {
   letter-spacing: 2px;
 }
 
-/* Invisible button in the top right corner for admin unlock */
 .admin-hidden-btn {
   position: absolute;
   top: 0;
@@ -332,4 +334,68 @@ footer {
   align-items: center;
   background-color: var(--bg-dark, #0f172a);
   color: var(--text-primary, #f8fafc);
+}
+
+/* =========================================
+   ADMIN MODAL STYLES
+   ========================================= */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(8px);
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: var(--bg-surface, #1e293b);
+  padding: 2.5rem;
+  border-radius: 12px;
+  border: 2px solid #ef4444;
+  text-align: center;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.75);
+  width: 90%;
+  max-width: 400px;
+}
+
+.modal-content h2 {
+  color: #ef4444;
+  margin-top: 0;
+}
+
+.pin-container input {
+  font-size: 2rem;
+  letter-spacing: 0.5em;
+  text-align: center;
+  width: 150px;
+  padding: 10px;
+  background: var(--bg-dark, #0f172a);
+  border: 1px solid var(--border-color, #334155);
+  color: #f8fafc;
+  border-radius: 8px;
+  margin: 1.5rem 0;
+  outline: none;
+}
+
+.pin-container input:focus {
+  border-color: var(--accent-blue, #38bdf8);
+}
+
+.error-text {
+  color: #ef4444;
+  font-size: 0.85rem;
+  margin-top: -1rem;
+  margin-bottom: 1rem;
+}
+
+.modal-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
