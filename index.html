@@ -13,11 +13,11 @@
     <!-- 1. LANDING VIEW -->
     <div id="landing-view" class="app-view active">
       <div class="landing-card">
-        <h1>Welcome</h1>
-        <p>Select your workspace</p>
+        <h1>Welcome, Mr. Castro</h1>
+        <p>Select your workspace for today.</p>
         <div class="landing-actions">
-          <button id="btn-nav-5th" class="fs-btn primary-btn">5th Grade</button>
-          <button id="btn-nav-whiteboard" class="fs-btn">Whiteboard</button>
+          <button id="btn-nav-5th" class="fs-btn primary-btn">5th Grade (Chromebooks)</button>
+          <button id="btn-nav-whiteboard" class="fs-btn">Whiteboard (Smartboard)</button>
         </div>
       </div>
     </div>
@@ -30,7 +30,7 @@
           <span>5TH GRADE MATH</span>
         </div>
         <div id="timer-display" class="timer">25:00</div>
-        <!-- Hidden button for admin unlock -->
+        <!-- Hidden button for admin unlock (top right corner) -->
         <button id="btn-admin-unlock" class="admin-hidden-btn"></button>
       </header>
       <main class="locked-content">
@@ -42,24 +42,30 @@
 
     <!-- 3. EXISTING WHITEBOARD VIEW -->
     <div id="whiteboard-view" class="app-view hidden">
-      <!-- YOUR EXISTING HEADER -->
       <header>
         <div class="brand">
           <strong>THE MAYAN SCHOOL</strong>
           <span>MR. CASTRO</span>
         </div>
+
         <div class="controls">
-          <!-- Your existing whiteboard controls stay exactly the same -->
+          <!-- Viewport Controls -->
           <div class="segmented-control">
             <button id="toggle-mac" class="toggle-btn" type="button">Mac View</button>
             <button id="toggle-smartboard" class="toggle-btn active" type="button">LG Smartboard</button>
           </div>
+
+          <!-- Drawing Tools -->
           <div class="segmented-control">
             <button id="tool-draw" class="toggle-btn active" type="button">Draw</button>
             <button id="tool-erase" class="toggle-btn" type="button">Erase</button>
             <input type="color" id="pen-color" value="#38bdf8" title="Pick Color" class="color-picker" />
           </div>
+
+          <!-- Touch Mode Toggle -->
           <button id="toggle-multitouch" class="fs-btn" type="button">Multi Touch: OFF</button>
+
+          <!-- Grid Controls -->
           <div class="segmented-control">
             <button id="btn-toggle-grid" class="toggle-btn" type="button">Grid: OFF</button>
             <select id="select-grid-size" class="grid-select" title="Grid Size">
@@ -69,19 +75,20 @@
               <option value="80">80px</option>
             </select>
           </div>
+
           <button id="btn-clear" class="fs-btn" type="button">Clear</button>
           <button id="btn-toggle-content" class="fs-btn" type="button">Toggle Text</button>
           <button id="btn-fullscreen" class="fs-btn" type="button">Fullscreen</button>
-          <!-- Added an exit button to get back to landing -->
           <button id="btn-exit-whiteboard" class="fs-btn exit-btn" type="button">Exit</button>
         </div>
       </header>
 
-      <!-- YOUR EXISTING MAIN -->
       <main>
         <div id="stage" class="smartboard">
+          <!-- Content Layer -->
           <div class="content-frame" id="content-frame">
             <div id="grid-overlay" class="grid-overlay hidden"></div>
+
             <div id="placeholder-text">
               <h2 id="view-title">LG Smartboard</h2>
               <div class="viewport-badge" id="view-dimensions">1280 × 720</div>
@@ -89,14 +96,33 @@
                 Select Draw or Erase to begin.
               </p>
             </div>
+
+            <!-- Canvas element -->
             <canvas id="draw-canvas"></canvas>
           </div>
+
           <footer>
             <span id="telemetry-preset">Preset: LG Smartboard</span>
             <span id="telemetry-fs">Fullscreen: OFF</span>
           </footer>
         </div>
       </main>
+    </div>
+
+    <!-- 4. ADMIN LOCKDOWN MODAL -->
+    <div id="admin-modal" class="modal-overlay hidden">
+      <div class="modal-content">
+        <h2>Device Locked</h2>
+        <p>Enter Admin PIN to exit 5th Grade mode.</p>
+        <div class="pin-container">
+          <input type="password" id="admin-pin-input" placeholder="••••" maxlength="4" />
+        </div>
+        <p id="pin-error" class="error-text hidden">Incorrect PIN.</p>
+        <div class="modal-actions">
+          <button id="btn-submit-pin" class="primary-btn">Unlock</button>
+          <button id="btn-return-fullscreen" class="fs-btn">Return to Assignment</button>
+        </div>
+      </div>
     </div>
 
     <script type="module" src="js/main.js"></script>
