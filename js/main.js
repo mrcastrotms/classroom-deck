@@ -16,6 +16,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const timerDisplay = document.getElementById("timer-display");
   const btnAdminUnlock = document.getElementById("btn-admin-unlock");
 
+  // Modal Elements
+  const adminModal = document.getElementById("admin-modal");
+  const pinInput = document.getElementById("admin-pin-input");
+  const btnSubmitPin = document.getElementById("btn-submit-pin");
+  const btnReturnFullscreen = document.getElementById("btn-return-fullscreen");
+  const pinError = document.getElementById("pin-error");
+
   // ==========================================
   // EXISTING WHITEBOARD ELEMENTS
   // ==========================================
@@ -47,8 +54,9 @@ document.addEventListener("DOMContentLoaded", () => {
   // ==========================================
   // SPA NAVIGATION & LOCKDOWN LOGIC
   // ==========================================
-  let drawer = null; // Declare early so SPA can resize it
+  let drawer = null; 
   let timerInterval = null;
+  let isFifthGradeLocked = false; 
 
   const switchView = (viewName) => {
     // Hide all
@@ -66,7 +74,8 @@ document.addEventListener("DOMContentLoaded", () => {
     } else if (viewName === "whiteboard" && viewWhiteboard) {
       viewWhiteboard.classList.remove("hidden");
       viewWhiteboard.classList.add("active");
-      // Give the DOM a tiny fraction of a second to render 'display: flex' before resizing canvas
+      
+      // Allow DOM to apply 'display: flex' before canvas resizes
       if (drawer) {
         setTimeout(() => drawer.resizeCanvas(), 50);
       }
@@ -84,10 +93,11 @@ document.addEventListener("DOMContentLoaded", () => {
     btnExitWhiteboard.addEventListener("click", () => switchView("landing"));
   }
 
-  // 5th Grade Lock & Timer
+  // --- 5TH GRADE LOCKDOWN START ---
   if (btnNav5th) {
     btnNav5th.addEventListener("click", () => {
       switchView("fifthGrade");
+      isFifthGradeLocked = true; 
 
       // 1. Force Fullscreen
       const docEl = document.documentElement;
@@ -95,7 +105,7 @@ document.addEventListener("DOMContentLoaded", () => {
         docEl.requestFullscreen().catch((err) => console.log("Fullscreen denied", err));
       }
 
-      // 2. Start 25 Minute Timer
+      // 2. Start Timer
       let timeRemaining = 25 * 60; // 1500 seconds
       if (timerDisplay) timerDisplay.textContent = "25:00";
 
@@ -117,18 +127,52 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Admin Unlock (Invisible top-right corner)
+  // --- MODAL LOGIC ---
+  const triggerUnlockModal = () => {
+    if (!adminModal) return;
+    adminModal.classList.remove("hidden");
+    pinInput.value = "";
+    pinError.classList.add("hidden");
+    pinInput.focus();
+  };
+
   if (btnAdminUnlock) {
-    btnAdminUnlock.addEventListener("click", () => {
-      const code = prompt("Enter Admin Code to exit lockdown:");
-      if (code === "0801") {
-        clearInterval(timerInterval);
-        if (document.exitFullscreen && document.fullscreenElement) {
-          document.exitFullscreen();
-        }
-        switchView("landing");
-      } else if (code !== null) {
-        alert("Incorrect code.");
+    btnAdminUnlock.addEventListener("click", triggerUnlockModal);
+  }
+
+  const attemptUnlock = () => {
+    if (pinInput.value === "0801") {
+      isFifthGradeLocked = false;
+      adminModal.classList.add("hidden");
+      clearInterval(timerInterval);
+      
+      if (document.fullscreenElement && document.exitFullscreen) {
+        document.exitFullscreen().catch(err => console.log(err));
+      }
+      switchView("landing");
+    } else {
+      pinError.classList.remove("hidden");
+      pinInput.value = "";
+      pinInput.focus();
+    }
+  };
+
+  if (btnSubmitPin) {
+    btnSubmitPin.addEventListener("click", attemptUnlock);
+  }
+
+  if (pinInput) {
+    pinInput.addEventListener("keypress", (e) => {
+      if (e.key === "Enter") attemptUnlock();
+    });
+  }
+
+  if (btnReturnFullscreen) {
+    btnReturnFullscreen.addEventListener("click", () => {
+      adminModal.classList.add("hidden");
+      const docEl = document.documentElement;
+      if (docEl.requestFullscreen) {
+        docEl.requestFullscreen().catch((err) => console.log("Fullscreen denied", err));
       }
     });
   }
@@ -156,7 +200,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-  // Viewport bindings
   if (toggleMac) {
     toggleMac.addEventListener("click", () => {
       handlePresetChange("MAC");
@@ -173,7 +216,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Drawing tools
   if (toolDraw) {
     toolDraw.addEventListener("click", () => {
       if (drawer) drawer.setMode("draw");
@@ -198,7 +240,6 @@ document.addEventListener("DOMContentLoaded", () => {
     btnClear.addEventListener("click", () => drawer.clearCanvas());
   }
 
-  // Multi touch toggle
   let isMultiTouchActive = false;
   if (toggleMultiTouch) {
     toggleMultiTouch.addEventListener("click", () => {
@@ -210,7 +251,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Grid toggle and size selection
   let isGridActive = false;
   const updateGridStyle = () => {
     if (!gridOverlay || !selectGridSize) return;
@@ -234,18 +274,17 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Toggle placeholder text
   if (btnToggleContent) {
     btnToggleContent.addEventListener("click", () => {
       if (placeholderText) placeholderText.classList.toggle("hidden");
     });
   }
 
-  // Fullscreen binding & state styling
   if (btnFullscreen) {
     btnFullscreen.addEventListener("click", () => viewport.toggleFullscreen());
   }
 
+  // This listener now handles both the whiteboard UI and catching Esc out of lockdown
   document.addEventListener("fullscreenchange", () => {
     const isFs = !!document.fullscreenElement;
     viewport.updateFullscreenState(isFs);
@@ -256,6 +295,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (drawer) {
       setTimeout(() => drawer.resizeCanvas(), 350);
+    }
+
+    // Catch Esc key during 5th grade lockdown
+    if (!isFs && isFifthGradeLocked) {
+      triggerUnlockModal();
     }
   });
 });
