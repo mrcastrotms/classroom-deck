@@ -3,6 +3,29 @@ import { DrawingManager } from "./modules/drawingManager.js";
 // NEW: Import the assignments from your decoupled module
 import { assignment122, assignment123 } from "./modules/assignments.js";
 
+// --- NOTEBOOK ZOOM CONTROLS ---
+const notebookWrapper = document.querySelector('.notebook-wrapper');
+const notebook = document.querySelector('.notebook');
+let currentScale = 1;
+
+if (notebookWrapper && notebook) {
+    notebookWrapper.addEventListener('wheel', (e) => {
+        // Check for Ctrl (Windows/Chromebook) or Cmd (Mac) for zooming
+        if (e.ctrlKey || e.metaKey) {
+            e.preventDefault(); // Stop default browser page zoom
+
+            // Calculate the new zoom level based on scroll direction
+            const zoomDelta = e.deltaY > 0 ? -0.05 : 0.05;
+            
+            // Constrain the zoom between 0.5x (zoomed out) and 2.5x (zoomed in)
+            currentScale = Math.min(Math.max(0.5, currentScale + zoomDelta), 2.5);
+
+            // Apply the scale transformation
+            notebook.style.transform = `scale(${currentScale})`;
+        }
+    }, { passive: false }); // 'passive: false' is required to use e.preventDefault()
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   // ==========================================
   // SPA & VIEW ROUTING ELEMENTS
