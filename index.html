@@ -23,14 +23,14 @@
     </div>
 
 <!-- 2. 5TH GRADE LOCKED VIEW -->
-    <div id="fifth-grade-view" class="app-view hidden">
+    <div id="fifth-grade-view" class="app-view active">
       <header class="locked-header">
         <div class="brand">
           <strong>THE MAYAN SCHOOL</strong>
           <span>5TH GRADE MATH</span>
         </div>
 
-        <!-- NEW: Assignment Toolbar -->
+        <!-- Assignment Toolbar -->
         <div class="controls">
             <div class="segmented-control" style="background: rgba(0,0,0,0.2); border-color: rgba(255,255,255,0.2);">
                 <button id="btn-load-122" class="toggle-btn active" style="color: white;" type="button">1.2.2</button>
@@ -38,14 +38,181 @@
             </div>
         </div>
 
-        <div id="timer-display" class="timer">25:00</div>
+        <div id="timer-display" class="timer">24:53</div>
         <!-- Hidden button for admin unlock (top right corner) -->
         <button id="btn-admin-unlock" class="admin-hidden-btn"></button>
       </header>
       
       <!-- Content Container for the Notebooks -->
-      <main id="fifth-grade-content" class="locked-content" style="padding: 0; display: block; overflow: hidden;">
-        <!-- JS will inject the assignment HTML here -->
+      <!-- FIXED: overflow is now auto -->
+      <main id="fifth-grade-content" class="locked-content" style="padding: 0; display: block; overflow: auto;">
+        <div class="notebook-wrapper">
+          <!-- FIXED: Removed hardcoded min-height so CSS can scale it -->
+          <div class="notebook">
+              <div class="red-margins"></div>
+              <div class="content">
+                  <!-- Header -->
+                  <div class="header-row">
+                      <div>Name: ______________________</div>
+                      <div>Date: ________________</div>
+                  </div>
+                  <div class="header-row">
+                      <div>Grade: 5th Grade</div>
+                  </div>
+                  
+                  <!-- Title -->
+                  <div class="center-title">Assignment 1.2.2</div>
+                  <div class="text-line"></div> 
+
+                  <!-- Section 1: Sum and Difference -->
+                  <div class="text-line bold">Find the sum and the difference.</div>
+                  <div class="text-line"></div>
+                  
+                  <div class="problem-section">
+                      <!-- Problem 1 (8 columns) -->
+                      <div class="math-problem">
+                          <div class="row"><span class="cell problem-number">1.</span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell">4</span><span class="cell">4</span><span class="cell">2</span></div>
+                          <div class="row"><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell">9</span><span class="cell">7<span class="comma">,</span></span><span class="cell">7</span><span class="cell">4</span><span class="cell">5</span></div>
+                          <div class="row"><span class="cell"></span><span class="cell"></span><span class="cell">4</span><span class="cell">9</span><span class="cell">5<span class="comma">,</span></span><span class="cell">1</span><span class="cell">5</span><span class="cell">5</span></div>
+                          <div class="row equals-line"><span class="cell"></span><span class="cell line">+</span><span class="cell line">9</span><span class="cell line">3</span><span class="cell line">2<span class="comma">,</span></span><span class="cell line">0</span><span class="cell line">4</span><span class="cell line">7</span></div>
+                      </div>
+
+                      <!-- Problem 2 (8 columns) -->
+                      <div class="math-problem">
+                          <div class="row"><span class="cell problem-number">2.</span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell">4</span><span class="cell">2</span></div>
+                          <div class="row"><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell">7</span><span class="cell">7</span></div>
+                          <div class="row"><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell">9<span class="comma">,</span></span><span class="cell">9</span><span class="cell">0</span><span class="cell">5</span></div>
+                          <div class="row equals-line"><span class="cell"></span><span class="cell line"></span><span class="cell line">+</span><span class="cell line">7</span><span class="cell line">8<span class="comma">,</span></span><span class="cell line">6</span><span class="cell line">7</span><span class="cell line">5</span></div>
+                      </div>
+
+                      <!-- Problem 3 (9 columns) -->
+                      <div class="math-problem">
+                          <div class="row"><span class="cell problem-number">3.</span><span class="cell"></span><span class="cell">7<span class="comma">,</span></span><span class="cell">8</span><span class="cell">3</span><span class="cell">3<span class="comma">,</span></span><span class="cell">2</span><span class="cell">8</span><span class="cell">5</span></div>
+                          <div class="row equals-line"><span class="cell"></span><span class="cell line">-</span><span class="cell line"></span><span class="cell line">8</span><span class="cell line">5</span><span class="cell line">0<span class="comma">,</span></span><span class="cell line">9</span><span class="cell line">0</span><span class="cell line">9</span></div>
+                      </div>
+
+                      <!-- Problem 4 (7 columns) -->
+                      <div class="math-problem">
+                          <div class="row"><span class="cell problem-number">4.</span><span class="cell"></span><span class="cell">2</span><span class="cell">2<span class="comma">,</span></span><span class="cell">6</span><span class="cell">4</span><span class="cell">7</span></div>
+                          <div class="row equals-line"><span class="cell"></span><span class="cell line">-</span><span class="cell line">1</span><span class="cell line">7<span class="comma">,</span></span><span class="cell line">9</span><span class="cell line">0</span><span class="cell line">6</span></div>
+                      </div>
+
+                      <!-- Problem 5 (8 columns) -->
+                      <div class="math-problem">
+                          <div class="row"><span class="cell problem-number">5.</span><span class="cell"></span><span class="cell">1</span><span class="cell">0</span><span class="cell">0<span class="comma">,</span></span><span class="cell">0</span><span class="cell">0</span><span class="cell">0</span></div>
+                          <div class="row equals-line"><span class="cell"></span><span class="cell line">-</span><span class="cell line"></span><span class="cell line">4</span><span class="cell line">5<span class="comma">,</span></span><span class="cell line">6</span><span class="cell line">7</span><span class="cell line">8</span></div>
+                      </div>
+                  </div>
+                  <div class="text-line"></div>
+
+                  <!-- Section 2: Product -->
+                  <div class="text-line bold">Find the product.</div>
+                  <div class="text-line"></div>
+                  
+                  <div class="problem-section">
+                      <!-- Problem 1 (6 columns) -->
+                      <div class="math-problem">
+                          <div class="row"><span class="cell problem-number">1.</span><span class="cell"></span><span class="cell">5<span class="comma">,</span></span><span class="cell">7</span><span class="cell">4</span><span class="cell">7</span></div>
+                          <div class="row equals-line"><span class="cell"></span><span class="cell line">x</span><span class="cell line"></span><span class="cell line"></span><span class="cell line"></span><span class="cell line">6</span></div>
+                      </div>
+
+                      <!-- Problem 2 (6 columns) -->
+                      <div class="math-problem">
+                          <div class="row"><span class="cell problem-number">2.</span><span class="cell"></span><span class="cell"></span><span class="cell">6</span><span class="cell">4</span><span class="cell">2</span></div>
+                          <div class="row equals-line"><span class="cell"></span><span class="cell line"></span><span class="cell line">x</span><span class="cell line"></span><span class="cell line">5</span><span class="cell line">0</span></div>
+                      </div>
+
+                      <!-- Problem 3 (6 columns) -->
+                      <div class="math-problem">
+                          <div class="row"><span class="cell problem-number">3.</span><span class="cell"></span><span class="cell"></span><span class="cell">3</span><span class="cell">1</span><span class="cell">5</span></div>
+                          <div class="row equals-line"><span class="cell"></span><span class="cell line"></span><span class="cell line">x</span><span class="cell line"></span><span class="cell line">2</span><span class="cell line">4</span></div>
+                      </div>
+
+                      <!-- Problem 4 (6 columns) -->
+                      <div class="math-problem">
+                          <div class="row"><span class="cell problem-number">4.</span><span class="cell"></span><span class="cell">8<span class="comma">,</span></span><span class="cell">0</span><span class="cell">1</span><span class="cell">2</span></div>
+                          <div class="row equals-line"><span class="cell"></span><span class="cell line">x</span><span class="cell line"></span><span class="cell line"></span><span class="cell line"></span><span class="cell line">7</span></div>
+                      </div>
+
+                      <!-- Problem 5 (6 columns) -->
+                      <div class="math-problem">
+                          <div class="row"><span class="cell problem-number">5.</span><span class="cell"></span><span class="cell"></span><span class="cell">4</span><span class="cell">0</span><span class="cell">9</span></div>
+                          <div class="row equals-line"><span class="cell"></span><span class="cell line"></span><span class="cell line">x</span><span class="cell line"></span><span class="cell line">6</span><span class="cell line">3</span></div>
+                      </div>
+                  </div>
+                  <div class="text-line"></div>
+
+                  <!-- Section 3: Quotients and Remainders -->
+                  <div class="text-line bold">Find the quotients and remainders, if there are any.</div>
+                  <div class="text-line"></div>
+                  
+                  <div class="problem-section">
+                      <!-- Problem 1 -->
+                      <div class="math-problem">
+                          <div class="row"><span class="cell problem-number">1)</span></div>
+                          <div class="row">
+                              <span class="cell"></span>
+                              <span class="cell">3<span class="paren">)</span></span>
+                              <span class="cell div-top">5</span>
+                              <span class="cell div-top">5</span>
+                              <span class="cell div-top">2</span>
+                          </div>
+                      </div>
+
+                      <!-- Problem 2 -->
+                      <div class="math-problem">
+                          <div class="row"><span class="cell problem-number">2)</span></div>
+                          <div class="row">
+                              <span class="cell"></span>
+                              <span class="cell">4<span class="paren">)</span></span>
+                              <span class="cell div-top">8</span>
+                              <span class="cell div-top">4</span>
+                              <span class="cell div-top">4</span>
+                          </div>
+                      </div>
+
+                      <!-- Problem 3 -->
+                      <div class="math-problem">
+                          <div class="row"><span class="cell problem-number">3)</span></div>
+                          <div class="row">
+                              <span class="cell"></span>
+                              <span class="cell">9<span class="paren">)</span></span>
+                              <span class="cell div-top">8<span class="comma">,</span></span>
+                              <span class="cell div-top">0</span>
+                              <span class="cell div-top">5</span>
+                              <span class="cell div-top">1</span>
+                          </div>
+                      </div>
+
+                      <!-- Problem 4 -->
+                      <div class="math-problem">
+                          <div class="row"><span class="cell problem-number">4)</span></div>
+                          <div class="row">
+                              <span class="cell"></span>
+                              <span class="cell">4<span class="paren">)</span></span>
+                              <span class="cell div-top">8<span class="comma">,</span></span>
+                              <span class="cell div-top">2</span>
+                              <span class="cell div-top">1</span>
+                              <span class="cell div-top">9</span>
+                          </div>
+                      </div>
+
+                      <!-- Problem 5 -->
+                      <div class="math-problem">
+                          <div class="row"><span class="cell problem-number">5)</span></div>
+                          <div class="row">
+                              <span class="cell"></span>
+                              <span class="cell">5<span class="paren">)</span></span>
+                              <span class="cell div-top">7<span class="comma">,</span></span>
+                              <span class="cell div-top">3</span>
+                              <span class="cell div-top">4</span>
+                              <span class="cell div-top">0</span>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+        </div>
       </main>
     </div>
 
