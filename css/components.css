@@ -402,23 +402,26 @@ footer {
 /* =========================================
    5TH GRADE NOTEBOOK STYLES
    ========================================= */
+/* --- NOTEBOOK SCALING & GESTURES --- */
 .notebook-wrapper {
-  width: 100%;
-  height: 100%;
-  overflow-y: auto;
-  overflow-x: auto;
-  background-color: #dbe2e8; /* Light blue-grey desk background */
-  padding: 40px 20px;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
+    touch-action: pan-x pan-y pinch-zoom; 
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    overflow-y: auto; 
+    overflow-x: hidden;
 }
 
 .notebook {
-  background-color: #fff;
-  width: 1050px; 
-  position: relative;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    width: 100%;
+    max-width: 1200px; /* Prevents it from looking stretched on the Mac */
+    min-height: 100vh; /* Fills the vertical space natively */
+    transform-origin: top center;
+    transition: transform 0.1s ease-out; /* Smooth zooming */
+    background-color: white; /* Make sure the notebook background stays solid */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15); /* Adds a nice page effect */
+}
   
   /* Draws the 30x30 blue grid */
   background-image: 
