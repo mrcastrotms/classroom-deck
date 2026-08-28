@@ -26,7 +26,7 @@
       </div>
     </div>
 
-<!-- 2. 4TH GRADE AGENDA VIEW -->
+    <!-- 2. 4TH GRADE AGENDA VIEW -->
     <div id="fourth-grade-view" class="app-view active">
       <header class="locked-header" style="background-color: #0ea5e9;">
         <div class="brand">
@@ -111,10 +111,6 @@
         </div>
       </main>
     </div>
-          <!-- Announcements -->
-        </div>
-      </main>
-    </div>
 
     <!-- 3. 5TH GRADE LOCKED VIEW -->
     <div id="fifth-grade-view" class="app-view hidden">
@@ -135,7 +131,7 @@
       <main id="fifth-grade-content" class="locked-content" style="padding: 0; display: block; overflow: auto;"></main>
     </div>
 
-    <!-- 4. WHITEBOARD VIEW (unchanged from your code) -->
+    <!-- 4. WHITEBOARD VIEW -->
     <div id="whiteboard-view" class="app-view hidden">
       <header>
         <div class="brand">
@@ -203,6 +199,26 @@
       </div>
     </div>
 
+    <!-- Firebase Analytics Script -->
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js";
+      import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-analytics.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyCHo_4I8FKDTBv8zWeFrR6qNR1GRQ9lMRY",
+        authDomain: "classroom-deck.firebaseapp.com",
+        projectId: "classroom-deck",
+        storageBucket: "classroom-deck.firebasestorage.app",
+        messagingSenderId: "714185471726",
+        appId: "1:714185471726:web:9c24a5d5265f7a9d1425ff",
+        measurementId: "G-Q64XG9RDEQ"
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const analytics = getAnalytics(app);
+    </script>
+
+    <!-- Your existing main logic -->
     <script type="module" src="js/main.js"></script>
   </body>
 </html>
