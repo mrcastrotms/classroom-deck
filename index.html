@@ -12,103 +12,160 @@
   <body>
     <!-- 1. LANDING VIEW -->
     <div id="landing-view" class="app-view active">
+      <!-- Language Toggle Top Left -->
+      <div class="lang-toggle-container">
+        <button id="btn-lang-toggle" class="fs-btn">🌐 ENG / ESP</button>
+      </div>
+
       <div class="landing-card">
-        <h1>Welcome</h1>
-        <p>Select your workspace</p>
+        <h1 id="landing-title" class="responsive-title">Welcome</h1>
+        <p id="landing-subtitle" class="responsive-subtitle">Select your workspace</p>
         <div class="landing-actions">
+          <button id="btn-nav-4th" class="fs-btn primary-btn">4th Grade</button>
           <button id="btn-nav-5th" class="fs-btn primary-btn">5th Grade</button>
           <button id="btn-nav-whiteboard" class="fs-btn">Whiteboard</button>
         </div>
       </div>
     </div>
 
-    <!-- 2. 5TH GRADE LOCKED VIEW -->
+    <!-- 2. 4TH GRADE AGENDA VIEW -->
+    <div id="fourth-grade-view" class="app-view hidden">
+      <header class="locked-header" style="background-color: #0ea5e9;">
+        <div class="brand">
+          <strong>THE MAYAN SCHOOL</strong>
+          <span>4TH GRADE AGENDA</span>
+        </div>
+        <div class="controls">
+          <span style="font-weight: 600; letter-spacing: 1px;">Aug. 31st - Sep. 4th, 2026</span>
+        </div>
+        <button id="btn-exit-4th" class="fs-btn exit-btn" style="border-color: white; color: white;">Exit</button>
+      </header>
+
+      <main class="agenda-content">
+        <div class="agenda-grid">
+          <!-- Monday -->
+          <div class="day-card">
+            <h3>MONDAY 31st</h3>
+            <div class="day-tasks">
+              <p class="alert"><strong>COMIENZAN ACTIVIDADES EXTRACURRICULARES.</strong> (Ver tabla de días asignados según actividad)</p>
+              <p><strong>SPELLING LIST:</strong> west, steep, member, gleam, fresh, freedom, speed, steam, beast, believe, speck, kept, cheap, pretend, greed, shelf, least, eager, reason, chief, complete, sleeve, engine, defend.</p>
+              <p><strong>READING LIST:</strong> Awkward, Resolution, Doubts, Relying, Clumsy.</p>
+            </div>
+          </div>
+
+          <!-- Tuesday -->
+          <div class="day-card">
+            <h3>TUESDAY 1st</h3>
+            <div class="day-tasks">
+              <p class="alert"><strong>DÍA DE LA BANDERA</strong> - ACTO CÍVICO por el inicio del mes patrio y 49 aniversario de MAYAN SCHOOL (actividad interna)</p>
+              <p><strong>GRAMMAR:</strong> QUIZ (4 types of sentences)</p>
+              <p><strong>Science:</strong> Traer los siguientes materiales para realizar una representación de Rayos-X: 20 hisopos y un bote pequeño de pintura blanca.</p>
+              <p><strong>Math:</strong> Complete the Study Guide. If you can print it, you can work on it; if you can’t, students can work in their notebook or in separate sheets of GRID PAPER (papel cuadrícula).</p>
+            </div>
+          </div>
+
+          <!-- Wednesday -->
+          <div class="day-card">
+            <h3>WEDNESDAY 2nd</h3>
+            <div class="day-tasks">
+              <p><strong>Ciencias Sociales:</strong> Completar los ejercicios del libro de texto (pág. 51 y 52) y libro de actividades (pág. 18 y 19).</p>
+              <p><strong>Math:</strong> Students will work on a quiz on Wednesday, they will need to work on multiplications, divisions, additions, subtractions, place value charts, and rounding whole numbers. They can use the Study Guide to practice.</p>
+              <p><strong>Social Studies:</strong> QUIZ. Topic: Land and regions in the US. (Use your notebook annotations, questionnaire and resources in MrL)</p>
+            </div>
+          </div>
+
+          <!-- Thursday -->
+          <div class="day-card">
+            <h3>THURSDAY 3rd</h3>
+            <div class="day-tasks">
+              <p><strong>Ciencias Sociales:</strong> Prueba. Temas: Justicia y Desigualdad Social (pág. 21), Derechos Humanos (pág. 30, 31, 32), Sistema Solar (pág. 45).</p>
+              <p><strong>Math:</strong> Students will work on a quiz on Thursday, they will need to work on multiplications, divisions, additions, subtractions, place value charts, and rounding whole numbers. They can use the Study Guide to practice.</p>
+            </div>
+          </div>
+
+          <!-- Friday -->
+          <div class="day-card">
+            <h3>FRIDAY 4th</h3>
+            <div class="day-tasks">
+              <p><strong>Reading:</strong> Vocabulary Quiz: “The Year of The Rat”</p>
+            </div>
+          </div>
+
+          <!-- Announcements -->
+          <div class="day-card announcements-card">
+            <h3>📢 ANUNCIOS</h3>
+            <div class="day-tasks">
+              <p><strong>Valor del mes:</strong> “AUTOCONTROL”</p>
+              <p>Los Seniors solicitan su colaboración en la primera actividad del TES. Solicitan la donación de dulces, churros, piñatas y juguetes.</p>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- 3. 5TH GRADE LOCKED VIEW -->
     <div id="fifth-grade-view" class="app-view hidden">
       <header class="locked-header">
         <div class="brand">
           <strong>THE MAYAN SCHOOL</strong>
           <span>5TH GRADE MATH</span>
         </div>
-
-        <!-- Assignment Toolbar -->
         <div class="controls">
             <div class="segmented-control" style="background: rgba(0,0,0,0.2); border-color: rgba(255,255,255,0.2);">
-                <button id="btn-load-122" class="toggle-btn active" style="color: white;" type="button">1.2.2</button>
-                <button id="btn-load-123" class="toggle-btn" style="color: white;" type="button">1.2.3</button>
+                <button id="btn-load-122" class="toggle-btn" style="color: white;" type="button">1.2.2</button>
+                <button id="btn-load-123" class="toggle-btn active" style="color: white;" type="button">1.2.3</button>
             </div>
         </div>
-
         <div id="timer-display" class="timer">25:00</div>
-        <!-- Hidden button for admin unlock (top right corner) -->
         <button id="btn-admin-unlock" class="admin-hidden-btn"></button>
       </header>
-      
-      <!-- Content Container for the Notebooks (HTML injected via JS) -->
-      <main id="fifth-grade-content" class="locked-content" style="padding: 0; display: block; overflow: auto;">
-      </main>
+      <main id="fifth-grade-content" class="locked-content" style="padding: 0; display: block; overflow: auto;"></main>
     </div>
 
-    <!-- 3. EXISTING WHITEBOARD VIEW -->
+    <!-- 4. WHITEBOARD VIEW (unchanged from your code) -->
     <div id="whiteboard-view" class="app-view hidden">
       <header>
         <div class="brand">
           <strong>THE MAYAN SCHOOL</strong>
           <span>MR. CASTRO</span>
         </div>
-
         <div class="controls">
-          <!-- Viewport Controls -->
           <div class="segmented-control">
             <button id="toggle-mac" class="toggle-btn" type="button">Mac View</button>
             <button id="toggle-smartboard" class="toggle-btn active" type="button">LG Smartboard</button>
           </div>
-
-          <!-- Drawing Tools -->
           <div class="segmented-control">
             <button id="tool-draw" class="toggle-btn active" type="button">Draw</button>
             <button id="tool-erase" class="toggle-btn" type="button">Erase</button>
-            <input type="color" id="pen-color" value="#38bdf8" title="Pick Color" class="color-picker" />
+            <input type="color" id="pen-color" value="#38bdf8" title="Pick Color" class="color-picker">
           </div>
-
-          <!-- Touch Mode Toggle -->
           <button id="toggle-multitouch" class="fs-btn" type="button">Multi Touch: OFF</button>
-
-          <!-- Grid Controls -->
           <div class="segmented-control">
             <button id="btn-toggle-grid" class="toggle-btn" type="button">Grid: OFF</button>
             <select id="select-grid-size" class="grid-select" title="Grid Size">
               <option value="20">20px</option>
-              <option value="40" selected>40px</option>
+              <option value="40" selected="">40px</option>
               <option value="60">60px</option>
               <option value="80">80px</option>
             </select>
           </div>
-
           <button id="btn-clear" class="fs-btn" type="button">Clear</button>
           <button id="btn-toggle-content" class="fs-btn" type="button">Toggle Text</button>
           <button id="btn-fullscreen" class="fs-btn" type="button">Fullscreen</button>
           <button id="btn-exit-whiteboard" class="fs-btn exit-btn" type="button">Exit</button>
         </div>
       </header>
-
       <main>
         <div id="stage" class="smartboard">
-          <!-- Content Layer -->
           <div class="content-frame" id="content-frame">
             <div id="grid-overlay" class="grid-overlay hidden"></div>
-
             <div id="placeholder-text">
               <h2 id="view-title">LG Smartboard</h2>
               <div class="viewport-badge" id="view-dimensions">1280 × 720</div>
-              <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 12px;">
-                Select Draw or Erase to begin.
-              </p>
+              <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 12px;">Select Draw or Erase to begin.</p>
             </div>
-
-            <!-- Canvas element -->
             <canvas id="draw-canvas"></canvas>
           </div>
-
           <footer>
             <span id="telemetry-preset">Preset: LG Smartboard</span>
             <span id="telemetry-fs">Fullscreen: OFF</span>
@@ -117,13 +174,13 @@
       </main>
     </div>
 
-    <!-- 4. ADMIN LOCKDOWN MODAL -->
+    <!-- 5. ADMIN LOCKDOWN MODAL -->
     <div id="admin-modal" class="modal-overlay hidden">
       <div class="modal-content">
         <h2>Device Locked</h2>
         <p>Enter Admin PIN to exit 5th Grade mode.</p>
         <div class="pin-container">
-          <input type="password" id="admin-pin-input" placeholder="••••" maxlength="4" />
+          <input type="password" id="admin-pin-input" placeholder="••••" maxlength="4">
         </div>
         <p id="pin-error" class="error-text hidden">Incorrect PIN.</p>
         <div class="modal-actions">
