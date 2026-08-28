@@ -1,30 +1,6 @@
 import { ViewportManager } from "./modules/viewportManager.js";
 import { DrawingManager } from "./modules/drawingManager.js";
-// NEW: Import the assignments from your decoupled module
 import { assignment122, assignment123 } from "./modules/assignments.js";
-
-// --- NOTEBOOK ZOOM CONTROLS ---
-const notebookWrapper = document.querySelector('.notebook-wrapper');
-const notebook = document.querySelector('.notebook');
-let currentScale = 1;
-
-if (notebookWrapper && notebook) {
-    notebookWrapper.addEventListener('wheel', (e) => {
-        // Check for Ctrl (Windows/Chromebook) or Cmd (Mac) for zooming
-        if (e.ctrlKey || e.metaKey) {
-            e.preventDefault(); // Stop default browser page zoom
-
-            // Calculate the new zoom level based on scroll direction
-            const zoomDelta = e.deltaY > 0 ? -0.05 : 0.05;
-            
-            // Constrain the zoom between 0.5x (zoomed out) and 2.5x (zoomed in)
-            currentScale = Math.min(Math.max(0.5, currentScale + zoomDelta), 2.5);
-
-            // Apply the scale transformation
-            notebook.style.transform = `scale(${currentScale})`;
-        }
-    }, { passive: false }); // 'passive: false' is required to use e.preventDefault()
-}
 
 document.addEventListener("DOMContentLoaded", () => {
   // ==========================================
@@ -33,10 +9,14 @@ document.addEventListener("DOMContentLoaded", () => {
   const viewLanding = document.getElementById("landing-view");
   const viewWhiteboard = document.getElementById("whiteboard-view");
   const viewFifthGrade = document.getElementById("fifth-grade-view");
+  const viewFourthGrade = document.getElementById("fourth-grade-view"); // NEW
 
+  const btnNav4th = document.getElementById("btn-nav-4th"); // NEW
   const btnNav5th = document.getElementById("btn-nav-5th");
   const btnNavWhiteboard = document.getElementById("btn-nav-whiteboard");
+  
   const btnExitWhiteboard = document.getElementById("btn-exit-whiteboard");
+  const btnExit4th = document.getElementById("btn-exit-4th"); // NEW
 
   const timerDisplay = document.getElementById("timer-display");
   const btnAdminUnlock = document.getElementById("btn-admin-unlock");
@@ -52,6 +32,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const fifthGradeContent = document.getElementById("fifth-grade-content");
   const btnLoad122 = document.getElementById("btn-load-122");
   const btnLoad123 = document.getElementById("btn-load-123");
+
+  // Language Elements
+  const btnLangToggle = document.getElementById("btn-lang-toggle");
+  const landingTitle = document.getElementById("landing-title");
+  const landingSubtitle = document.getElementById("landing-subtitle");
 
   // ==========================================
   // EXISTING WHITEBOARD ELEMENTS
@@ -82,6 +67,31 @@ document.addEventListener("DOMContentLoaded", () => {
   const selectGridSize = document.getElementById("select-grid-size");
 
   // ==========================================
+  // LANGUAGE TOGGLE LOGIC
+  // ==========================================
+  let currentLang = "ENG";
+  
+  if (btnLangToggle) {
+    btnLangToggle.addEventListener("click", () => {
+      if (currentLang === "ENG") {
+        currentLang = "ESP";
+        landingTitle.textContent = "Bienvenido";
+        landingSubtitle.textContent = "Seleccione su espacio de trabajo";
+        if(btnNav4th) btnNav4th.textContent = "4to Grado";
+        if(btnNav5th) btnNav5th.textContent = "5to Grado";
+        if(btnNavWhiteboard) btnNavWhiteboard.textContent = "Pizarra Interactiva";
+      } else {
+        currentLang = "ENG";
+        landingTitle.textContent = "Welcome";
+        landingSubtitle.textContent = "Select your workspace";
+        if(btnNav4th) btnNav4th.textContent = "4th Grade";
+        if(btnNav5th) btnNav5th.textContent = "5th Grade";
+        if(btnNavWhiteboard) btnNavWhiteboard.textContent = "Whiteboard";
+      }
+    });
+  }
+
+  // ==========================================
   // SPA NAVIGATION & LOCKDOWN LOGIC
   // ==========================================
   let drawer = null; 
@@ -90,7 +100,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const switchView = (viewName) => {
     // Hide all
-    [viewLanding, viewWhiteboard, viewFifthGrade].forEach((v) => {
+    [viewLanding, viewWhiteboard, viewFifthGrade, viewFourthGrade].forEach((v) => {
       if (v) {
         v.classList.remove("active");
         v.classList.add("hidden");
@@ -112,35 +122,57 @@ document.addEventListener("DOMContentLoaded", () => {
     } else if (viewName === "fifthGrade" && viewFifthGrade) {
       viewFifthGrade.classList.remove("hidden");
       viewFifthGrade.classList.add("active");
+    } else if (viewName === "fourthGrade" && viewFourthGrade) {
+      viewFourthGrade.classList.remove("hidden");
+      viewFourthGrade.classList.add("active");
     }
   };
 
-  if (btnNavWhiteboard) {
-    btnNavWhiteboard.addEventListener("click", () => switchView("whiteboard"));
-  }
+  // Basic Nav Listeners
+  if (btnNavWhiteboard) btnNavWhiteboard.addEventListener("click", () => switchView("whiteboard"));
+  if (btnExitWhiteboard) btnExitWhiteboard.addEventListener("click", () => switchView("landing"));
+  if (btnNav4th) btnNav4th.addEventListener("click", () => switchView("fourthGrade"));
+  if (btnExit4th) btnExit4th.addEventListener("click", () => switchView("landing"));
 
-  if (btnExitWhiteboard) {
-    btnExitWhiteboard.addEventListener("click", () => switchView("landing"));
+  // ==========================================
+  // NOTEBOOK ZOOM CONTROLS (Updated for dynamic HTML)
+  // ==========================================
+  let currentScale = 1;
+
+  if (fifthGradeContent) {
+    fifthGradeContent.addEventListener('wheel', (e) => {
+      // Find the notebook ONLY if it exists inside the container right now
+      const notebook = fifthGradeContent.querySelector('.notebook');
+      if (!notebook) return;
+
+      if (e.ctrlKey || e.metaKey) {
+        e.preventDefault(); 
+        const zoomDelta = e.deltaY > 0 ? -0.05 : 0.05;
+        currentScale = Math.min(Math.max(0.5, currentScale + zoomDelta), 2.5);
+        notebook.style.transform = `scale(${currentScale})`;
+      }
+    }, { passive: false });
   }
 
   // --- 5TH GRADE ASSIGNMENT TOGGLES ---
   const loadAssignment = (assignmentHtml, activeBtn) => {
     if (fifthGradeContent) {
       fifthGradeContent.innerHTML = assignmentHtml;
+      
+      // Reset zoom back to normal when changing assignments
+      currentScale = 1; 
+      const notebook = fifthGradeContent.querySelector('.notebook');
+      if (notebook) notebook.style.transform = `scale(1)`;
     }
+    
     // Manage active states
     if (btnLoad122) btnLoad122.classList.remove("active");
     if (btnLoad123) btnLoad123.classList.remove("active");
     if (activeBtn) activeBtn.classList.add("active");
   };
 
-  if (btnLoad122) {
-    btnLoad122.addEventListener("click", () => loadAssignment(assignment122, btnLoad122));
-  }
-
-  if (btnLoad123) {
-    btnLoad123.addEventListener("click", () => loadAssignment(assignment123, btnLoad123));
-  }
+  if (btnLoad122) btnLoad122.addEventListener("click", () => loadAssignment(assignment122, btnLoad122));
+  if (btnLoad123) btnLoad123.addEventListener("click", () => loadAssignment(assignment123, btnLoad123));
 
   // --- 5TH GRADE LOCKDOWN START ---
   if (btnNav5th) {
@@ -183,9 +215,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const triggerUnlockModal = () => {
     if (!adminModal) return;
     adminModal.classList.remove("hidden");
-    pinInput.value = "";
-    pinError.classList.add("hidden");
-    pinInput.focus();
+    if (pinInput) {
+      pinInput.value = "";
+      pinInput.focus();
+    }
+    if (pinError) pinError.classList.add("hidden");
   };
 
   if (btnAdminUnlock) {
@@ -193,26 +227,23 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   const attemptUnlock = () => {
-    if (pinInput.value === "0801") {
+    if (pinInput && pinInput.value === "0801") {
       isFifthGradeLocked = false;
-      adminModal.classList.add("hidden");
+      if (adminModal) adminModal.classList.add("hidden");
       clearInterval(timerInterval);
       
       if (document.fullscreenElement && document.exitFullscreen) {
         document.exitFullscreen().catch(err => console.log(err));
       }
       switchView("landing");
-    } else {
+    } else if (pinInput && pinError) {
       pinError.classList.remove("hidden");
       pinInput.value = "";
       pinInput.focus();
     }
   };
 
-  if (btnSubmitPin) {
-    btnSubmitPin.addEventListener("click", attemptUnlock);
-  }
-
+  if (btnSubmitPin) btnSubmitPin.addEventListener("click", attemptUnlock);
   if (pinInput) {
     pinInput.addEventListener("keypress", (e) => {
       if (e.key === "Enter") attemptUnlock();
@@ -221,14 +252,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (btnReturnFullscreen) {
     btnReturnFullscreen.addEventListener("click", () => {
-      adminModal.classList.add("hidden");
+      if (adminModal) adminModal.classList.add("hidden");
       const docEl = document.documentElement;
       if (docEl.requestFullscreen) {
         docEl.requestFullscreen().catch((err) => console.log("Fullscreen denied", err));
       }
     });
   }
-
 
   // ==========================================
   // EXISTING WHITEBOARD MANAGERS & LOGIC
@@ -336,7 +366,7 @@ document.addEventListener("DOMContentLoaded", () => {
     btnFullscreen.addEventListener("click", () => viewport.toggleFullscreen());
   }
 
-  // This listener now handles both the whiteboard UI and catching Esc out of lockdown
+  // This listener handles the whiteboard UI and catching Esc out of lockdown
   document.addEventListener("fullscreenchange", () => {
     const isFs = !!document.fullscreenElement;
     viewport.updateFullscreenState(isFs);
