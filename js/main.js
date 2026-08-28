@@ -99,6 +99,9 @@ document.addEventListener("DOMContentLoaded", () => {
   let isFifthGradeLocked = false; 
 
   const switchView = (viewName) => {
+    // Save the current view to the browser's memory
+    localStorage.setItem("activeWorkspace", viewName);
+
     // Hide all
     [viewLanding, viewWhiteboard, viewFifthGrade, viewFourthGrade].forEach((v) => {
       if (v) {
@@ -384,4 +387,22 @@ document.addEventListener("DOMContentLoaded", () => {
       triggerUnlockModal();
     }
   });
+
+  // ==========================================
+  // RESTORE SESSION ON REFRESH
+  // ==========================================
+  const savedView = localStorage.getItem("activeWorkspace") || "landing";
+
+  if (savedView === "fourthGrade") {
+    switchView("fourthGrade");
+  } else if (savedView === "whiteboard") {
+    switchView("whiteboard");
+  } else if (savedView === "fifthGrade") {
+    switchView("fifthGrade");
+    isFifthGradeLocked = true;
+    loadAssignment(assignment122, btnLoad122);
+  } else {
+    switchView("landing");
+  }
+
 });
