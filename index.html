@@ -220,5 +220,21 @@
 
     <!-- Your existing main logic -->
     <script type="module" src="js/main.js"></script>
+    <!-- MOBILE HARD RESET BUTTON -->
+    <button id="btn-hard-reset" class="fs-btn" style="position: fixed; bottom: 16px; right: 16px; z-index: 9999; background: #334155; color: white; border-color: #475569; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.3);">
+      Refresh
+    </button>
+
+    <script>
+      document.getElementById('btn-hard-reset').addEventListener('click', function() {
+        // Clear saved views or states
+        localStorage.clear();
+        sessionStorage.clear();
+        
+        // Force a fresh reload by appending a unique timestamp to the URL
+        // This tricks the mobile browser into ignoring the cached version
+        window.location.href = window.location.pathname + '?refresh=' + new Date().getTime();
+      });
+    </script>
   </body>
 </html>
