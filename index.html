@@ -8,6 +8,77 @@
     <link rel="stylesheet" href="css/variables.css" />
     <link rel="stylesheet" href="css/base.css" />
     <link rel="stylesheet" href="css/components.css" />
+
+    <!-- NEW STYLES FOR LOCKDOWN & PDF MODAL -->
+    <style>
+      /* PDF Modal Styling */
+      .pdf-modal-overlay {
+        display: none;
+        position: fixed;
+        z-index: 9000;
+        left: 0;
+        top: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: rgba(0,0,0,0.8);
+      }
+      .pdf-modal-content {
+        background-color: #fff;
+        margin: 2% auto;
+        padding: 10px;
+        width: 90%;
+        height: 90%;
+        border-radius: 8px;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+      }
+      .close-pdf-btn {
+        position: absolute;
+        top: 10px;
+        right: 20px;
+        font-size: 28px;
+        font-weight: bold;
+        color: #333;
+        cursor: pointer;
+        background: none;
+        border: none;
+      }
+      
+      /* Red Lockdown Screen Styling */
+      .lockdown-screen {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: rgba(220, 38, 38, 0.98); /* Deep Red */
+        z-index: 9999; /* Above absolutely everything */
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+      }
+      .lockdown-card {
+        background: white;
+        padding: 40px;
+        border-radius: 12px;
+        text-align: center;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        max-width: 400px;
+      }
+      .lockdown-card h2 { color: #dc2626; margin-top: 0; font-size: 1.8rem; }
+      .lockdown-card p { color: #334155; margin-bottom: 20px; }
+      .lockdown-card input {
+        font-size: 24px;
+        padding: 12px;
+        margin-bottom: 15px;
+        text-align: center;
+        width: 100%;
+        border: 2px solid #cbd5e1;
+        border-radius: 6px;
+      }
+    </style>
   </head>
   <body>
     <!-- 1. LANDING VIEW -->
@@ -22,12 +93,14 @@
         <p id="landing-subtitle" class="responsive-subtitle">Select your workspace</p>
         <div class="landing-actions">
           <button id="btn-nav-4th" class="fs-btn primary-btn">4th Grade</button>
+          <!-- Added 5th Grade Button Here -->
+          <button id="btn-nav-5th" class="fs-btn primary-btn" style="margin-left: 10px;">5th Grade</button>
         </div>
       </div>
     </div>
 
     <!-- 2. 4TH GRADE AGENDA VIEW -->
-    <div id="fourth-grade-view" class="app-view active">
+    <div id="fourth-grade-view" class="app-view hidden">
       <header class="locked-header" style="background-color: #0ea5e9;">
         <div class="brand">
           <strong>THE MAYAN SCHOOL</strong>
@@ -112,7 +185,7 @@
       </main>
     </div>
 
-    <!-- 3. 5TH GRADE LOCKED VIEW -->
+    <!-- 3. 5TH GRADE LOCKED VIEW WITH TIMER & PDF -->
     <div id="fifth-grade-view" class="app-view hidden">
       <header class="locked-header">
         <div class="brand">
@@ -125,10 +198,20 @@
                 <button id="btn-load-123" class="toggle-btn active" style="color: white;" type="button">1.2.3</button>
             </div>
         </div>
-        <div id="timer-display" class="timer">25:00</div>
-        <button id="btn-admin-unlock" class="admin-hidden-btn"></button>
+        <!-- 30 Min Timer -->
+        <div id="fifth-timer-display" class="timer">30:00</div> 
+        <button id="btn-exit-5th" class="fs-btn exit-btn" style="border-color: white; color: white;">Exit</button>
       </header>
-      <main id="fifth-grade-content" class="locked-content" style="padding: 0; display: block; overflow: auto;"></main>
+      <main id="fifth-grade-content" class="locked-content" style="padding: 24px; display: block; overflow: auto; background-color: #f1f5f9;">
+        <div style="background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); max-width: 600px; margin: 0 auto; text-align: center;">
+            <h2 style="color: #0f172a; margin-bottom: 10px;">Independent Work Session</h2>
+            <p style="color: #64748b; margin-bottom: 24px;">Do not switch tabs or minimize this window once the timer starts.</p>
+            
+            <button id="btn-start-5th-timer" class="fs-btn primary-btn" style="font-size: 1.1rem; padding: 12px 24px; margin-bottom: 16px; width: 100%;">Start 30:00 Timer & Lockdown</button>
+            <br>
+            <button id="btn-open-pdf" class="fs-btn" style="width: 100%; border: 2px solid #cbd5e1;">Open Study Guide PDF</button>
+        </div>
+      </main>
     </div>
 
     <!-- 4. WHITEBOARD VIEW -->
@@ -183,7 +266,7 @@
       </main>
     </div>
 
-    <!-- 5. ADMIN LOCKDOWN MODAL -->
+    <!-- 5. ADMIN LOCKDOWN MODAL (Existing) -->
     <div id="admin-modal" class="modal-overlay hidden">
       <div class="modal-content">
         <h2>Device Locked</h2>
@@ -198,6 +281,28 @@
         </div>
       </div>
     </div>
+
+    <!-- 6. PDF VIEWER MODAL -->
+    <div id="pdf-modal" class="pdf-modal-overlay">
+      <div class="pdf-modal-content">
+        <button id="btn-close-pdf" class="close-pdf-btn">&times;</button>
+        <iframe src="studyguide.pdf" width="100%" height="100%" style="border: none; flex-grow: 1;">
+            Your browser does not support PDFs. Please download the PDF to view it.
+        </iframe>
+      </div>
+    </div>
+
+    <!-- 7. STRICT RED LOCKDOWN OVERLAY (DOM Focus Lost) -->
+    <div id="strict-lockdown-overlay" class="lockdown-screen">
+      <div class="lockdown-card">
+        <h2>⚠️ SECURITY LOCKDOWN ⚠️</h2>
+        <p>You left the active assignment window. Waiting for teacher override.</p>
+        <input type="password" id="strict-unlock-pin" placeholder="Enter PIN (0801)">
+        <button id="btn-strict-unlock" class="fs-btn primary-btn">Unlock Screen</button>
+        <p id="strict-lockdown-error" style="color: #dc2626; display: none; margin-top: 10px; font-weight: bold;">Incorrect PIN.</p>
+      </div>
+    </div>
+
 
     <!-- Firebase Analytics Script -->
     <script type="module">
@@ -220,6 +325,106 @@
 
     <!-- Your existing main logic -->
     <script type="module" src="js/main.js"></script>
+    
+    <!-- 5TH GRADE TIMER & LOCKDOWN LOGIC (Added inline to guarantee it works) -->
+    <script>
+      // --- View Navigation Extensions ---
+      // (This works alongside whatever routing main.js is doing)
+      const landingView = document.getElementById('landing-view');
+      const fifthView = document.getElementById('fifth-grade-view');
+      const fourthView = document.getElementById('fourth-grade-view');
+      
+      document.getElementById('btn-nav-5th').addEventListener('click', () => {
+        document.querySelectorAll('.app-view').forEach(v => {
+            v.classList.remove('active');
+            v.classList.add('hidden');
+        });
+        fifthView.classList.remove('hidden');
+        fifthView.classList.add('active');
+      });
+
+      document.getElementById('btn-exit-5th').addEventListener('click', () => {
+        fifthView.classList.remove('active');
+        fifthView.classList.add('hidden');
+        landingView.classList.remove('hidden');
+        landingView.classList.add('active');
+        isFifthGradeSessionActive = false; // Turn off monitoring if they exit legitimately
+      });
+
+      // --- PDF Modal Logic ---
+      document.getElementById('btn-open-pdf').addEventListener('click', () => {
+        document.getElementById('pdf-modal').style.display = 'flex';
+      });
+      
+      document.getElementById('btn-close-pdf').addEventListener('click', () => {
+        document.getElementById('pdf-modal').style.display = 'none';
+      });
+
+      // --- Timer & Security Lockdown Logic ---
+      let fifthTimerInterval;
+      let timeRemaining = 1800; // 30 minutes
+      let isFifthGradeSessionActive = false;
+
+      document.getElementById('btn-start-5th-timer').addEventListener('click', (e) => {
+        isFifthGradeSessionActive = true;
+        e.target.innerText = "Session Active - Do Not Leave Window";
+        e.target.style.backgroundColor = "#10b981"; // Turn green
+        e.target.disabled = true; // Prevent multiple clicks
+
+        clearInterval(fifthTimerInterval);
+        timeRemaining = 1800;
+
+        fifthTimerInterval = setInterval(() => {
+          if (timeRemaining <= 0) {
+            clearInterval(fifthTimerInterval);
+            document.getElementById('fifth-timer-display').innerText = "00:00";
+            isFifthGradeSessionActive = false; // Disable lockdown when time is up
+            alert("Time is up!");
+            return;
+          }
+          
+          timeRemaining--;
+          let m = Math.floor(timeRemaining / 60);
+          let s = timeRemaining % 60;
+          document.getElementById('fifth-timer-display').innerText = 
+            (m < 10 ? "0" : "") + m + ":" + (s < 10 ? "0" : "") + s;
+        }, 1000);
+      });
+
+      // DOM Monitoring (Triggers Red Screen)
+      function triggerStrictLockdown() {
+        if (isFifthGradeSessionActive) {
+          document.getElementById('strict-lockdown-overlay').style.display = 'flex';
+        }
+      }
+
+      // Check for tab switch / minimize
+      document.addEventListener("visibilitychange", () => {
+        if (document.visibilityState === 'hidden') {
+          triggerStrictLockdown();
+        }
+      });
+
+      // Check for clicking outside browser
+      window.addEventListener("blur", () => {
+        triggerStrictLockdown();
+      });
+
+      // Unlock Screen with PIN 0801
+      document.getElementById('btn-strict-unlock').addEventListener('click', () => {
+        const pin = document.getElementById('strict-unlock-pin').value;
+        const err = document.getElementById('strict-lockdown-error');
+        
+        if (pin === "0801") {
+          document.getElementById('strict-lockdown-overlay').style.display = 'none';
+          document.getElementById('strict-unlock-pin').value = ''; // clear input
+          err.style.display = 'none';
+        } else {
+          err.style.display = 'block';
+        }
+      });
+    </script>
+
     <!-- MOBILE HARD RESET BUTTON -->
     <button id="btn-hard-reset" class="fs-btn" style="position: fixed; bottom: 16px; right: 16px; z-index: 9999; background: #334155; color: white; border-color: #475569; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.3);">
       Refresh
