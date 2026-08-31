@@ -154,8 +154,8 @@
                 <button id="btn-load-122" class="toggle-btn active" style="color: white;" type="button">1.2.2</button>
                 <button id="btn-load-123" class="toggle-btn" style="color: white;" type="button">1.2.3</button>
             </div>
-            <button id="btn-start-5th-timer" class="fs-btn primary-btn" style="background-color: #3b82f6; border: none;">Start 30:00 Lockdown</button>
-            <div id="fifth-timer-display" class="timer" style="font-size: 1.5rem; font-family: monospace; font-weight: bold; color: white;">30:00</div> 
+            <!-- Timer starts automatically, no start button needed -->
+            <div id="fifth-timer-display" class="timer" style="font-size: 1.5rem; font-family: monospace; font-weight: bold; color: white; background: #dc2626; padding: 5px 15px; border-radius: 6px;">30:00</div> 
         </div>
         
         <button id="btn-exit-5th" class="fs-btn exit-btn" style="border-color: white; color: white;">Exit</button>
@@ -218,17 +218,17 @@
       </main>
     </div>
 
-    <!-- 5. ADMIN LOCKDOWN MODAL -->
+    <!-- 5. ADMIN EXIT LOCKDOWN MODAL (Reused for exiting 5th Grade) -->
     <div id="admin-modal" class="modal-overlay hidden">
       <div class="modal-content">
-        <h2>Device Locked</h2>
-        <p>Enter Admin PIN to exit 5th Grade mode.</p>
+        <h2>Exit Assignment?</h2>
+        <p>Enter Teacher PIN to end the session early.</p>
         <div class="pin-container">
           <input type="password" id="admin-pin-input" placeholder="••••" maxlength="4">
         </div>
         <p id="pin-error" class="error-text hidden">Incorrect PIN.</p>
         <div class="modal-actions">
-          <button id="btn-submit-pin" class="primary-btn">Unlock</button>
+          <button id="btn-submit-pin" class="primary-btn">Unlock & Exit</button>
           <button id="btn-return-fullscreen" class="fs-btn">Return to Assignment</button>
         </div>
       </div>
@@ -266,49 +266,36 @@
 
     <script type="module" src="js/main.js"></script>
     
-    <!-- 5TH GRADE TIMER, LOCKDOWN, & CONTENT INJECTION -->
+    <!-- 5TH GRADE LOGIC: AUTO-TIMER, EXIT-PIN, LOGGING, & CONTENT INJECTION -->
     <script>
       const landingView = document.getElementById('landing-view');
       const fifthView = document.getElementById('fifth-grade-view');
       
-      // --- Navigation ---
+      let fifthTimerInterval;
+      let timeRemaining = 1800; // 30 minutes
+      let isFifthGradeSessionActive = false;
+
+      // --- Navigation & Auto-Start ---
       document.getElementById('btn-nav-5th').addEventListener('click', () => {
+        // Switch Views
         document.querySelectorAll('.app-view').forEach(v => {
             v.classList.remove('active');
             v.classList.add('hidden');
         });
         fifthView.classList.remove('hidden');
         fifthView.classList.add('active');
-      });
 
-      document.getElementById('btn-exit-5th').addEventListener('click', () => {
-        fifthView.classList.remove('active');
-        fifthView.classList.add('hidden');
-        landingView.classList.remove('hidden');
-        landingView.classList.add('active');
-        isFifthGradeSessionActive = false;
-      });
-
-      // --- Timer & Security Lockdown Logic ---
-      let fifthTimerInterval;
-      let timeRemaining = 1800; // 30 minutes
-      let isFifthGradeSessionActive = false;
-
-      document.getElementById('btn-start-5th-timer').addEventListener('click', (e) => {
+        // Auto-Start Timer & Lockdown Monitoring
         isFifthGradeSessionActive = true;
-        e.target.innerText = "Session Active";
-        e.target.style.backgroundColor = "#10b981"; // Green
-        e.target.disabled = true;
-
         clearInterval(fifthTimerInterval);
         timeRemaining = 1800;
-
+        
         fifthTimerInterval = setInterval(() => {
           if (timeRemaining <= 0) {
             clearInterval(fifthTimerInterval);
             document.getElementById('fifth-timer-display').innerText = "00:00";
             isFifthGradeSessionActive = false; 
-            alert("Time is up!");
+            alert("Time is up! You may now exit.");
             return;
           }
           
@@ -320,20 +307,71 @@
         }, 1000);
       });
 
-      function triggerStrictLockdown() {
+      // --- Secure Exit (Requires 0801) ---
+      document.getElementById('btn-exit-5th').addEventListener('click', (e) => {
+        // Prevent default exit script from running in main.js
+        e.stopImmediatePropagation(); 
+        
+        // Open Admin Exit PIN Modal
+        document.getElementById('admin-modal').classList.remove('hidden');
+        document.getElementById('admin-pin-input').value = '';
+        document.getElementById('pin-error').classList.add('hidden');
+      });
+
+      // Unlock & Process Exit
+      document.getElementById('btn-submit-pin').addEventListener('click', () => {
+        const pin = document.getElementById('admin-pin-input').value;
+        if (pin === "0801") {
+            document.getElementById('admin-modal').classList.add('hidden');
+            
+            // Cleanly end session and return to Landing
+            isFifthGradeSessionActive = false;
+            clearInterval(fifthTimerInterval);
+            fifthView.classList.remove('active');
+            fifthView.classList.add('hidden');
+            landingView.classList.remove('hidden');
+            landingView.classList.add('active');
+        } else {
+            document.getElementById('pin-error').classList.remove('hidden');
+        }
+      });
+      
+      document.getElementById('btn-return-fullscreen').addEventListener('click', () => {
+         document.getElementById('admin-modal').classList.add('hidden');
+      });
+
+      // --- Security Monitoring & Event Logging ---
+      function logViolation(reason) {
+          const timestamp = new Date().toLocaleTimeString();
+          const logMessage = `[VIOLATION LOGGED] ${reason} at ${timestamp}`;
+          
+          // Log to DevTools Console
+          console.warn(logMessage);
+          
+          // Save to Session Storage so you can check history easily
+          let sessionLogs = JSON.parse(sessionStorage.getItem('fifthGradeLogs')) || [];
+          sessionLogs.push(logMessage);
+          sessionStorage.setItem('fifthGradeLogs', JSON.stringify(sessionLogs));
+      }
+
+      function triggerStrictLockdown(reason) {
         if (isFifthGradeSessionActive) {
+          logViolation(reason);
           document.getElementById('strict-lockdown-overlay').style.display = 'flex';
         }
       }
 
+      // Triggers if they switch tabs
       document.addEventListener("visibilitychange", () => {
-        if (document.visibilityState === 'hidden') triggerStrictLockdown();
+        if (document.visibilityState === 'hidden') triggerStrictLockdown("Tab Switched or Browser Minimized");
       });
 
+      // Triggers if they click outside the browser (e.g. opening another app)
       window.addEventListener("blur", () => {
-        triggerStrictLockdown();
+        triggerStrictLockdown("Browser Lost Focus");
       });
 
+      // Unlock from cheating screen
       document.getElementById('btn-strict-unlock').addEventListener('click', () => {
         const pin = document.getElementById('strict-unlock-pin').value;
         const err = document.getElementById('strict-lockdown-error');
