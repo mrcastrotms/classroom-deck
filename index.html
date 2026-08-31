@@ -9,43 +9,8 @@
     <link rel="stylesheet" href="css/base.css" />
     <link rel="stylesheet" href="css/components.css" />
 
-    <!-- NEW STYLES FOR LOCKDOWN & PDF MODAL -->
+    <!-- STYLES FOR STRICT LOCKDOWN -->
     <style>
-      /* PDF Modal Styling */
-      .pdf-modal-overlay {
-        display: none;
-        position: fixed;
-        z-index: 9000;
-        left: 0;
-        top: 0;
-        width: 100vw;
-        height: 100vh;
-        background-color: rgba(0,0,0,0.8);
-      }
-      .pdf-modal-content {
-        background-color: #fff;
-        margin: 2% auto;
-        padding: 10px;
-        width: 90%;
-        height: 90%;
-        border-radius: 8px;
-        position: relative;
-        display: flex;
-        flex-direction: column;
-      }
-      .close-pdf-btn {
-        position: absolute;
-        top: 10px;
-        right: 20px;
-        font-size: 28px;
-        font-weight: bold;
-        color: #333;
-        cursor: pointer;
-        background: none;
-        border: none;
-      }
-      
-      /* Red Lockdown Screen Styling */
       .lockdown-screen {
         display: none;
         position: fixed;
@@ -83,7 +48,6 @@
   <body>
     <!-- 1. LANDING VIEW -->
     <div id="landing-view" class="app-view active">
-      <!-- Language Toggle Top Left -->
       <div class="lang-toggle-container">
         <button id="btn-lang-toggle" class="fs-btn">ENGLISH / SPANISH</button>
       </div>
@@ -93,7 +57,6 @@
         <p id="landing-subtitle" class="responsive-subtitle">Select your workspace</p>
         <div class="landing-actions">
           <button id="btn-nav-4th" class="fs-btn primary-btn">4th Grade</button>
-          <!-- Added 5th Grade Button Here -->
           <button id="btn-nav-5th" class="fs-btn primary-btn" style="margin-left: 10px;">5th Grade</button>
         </div>
       </div>
@@ -107,7 +70,6 @@
           <span>4TH GRADE MATH</span>
         </div>
         <div class="controls">
-          <!-- Contrast Toggle Button -->
           <button id="btn-toggle-contrast" class="fs-btn" style="border-color: rgba(255,255,255,0.6); color: white;" onclick="document.getElementById('agenda-cards').classList.toggle('high-contrast-mode')">
             Toggle Contrast
           </button>
@@ -116,7 +78,6 @@
       </header>
 
       <main class="agenda-content">
-        <!-- Embedded CSS for the contrast toggle behavior -->
         <style>
           .math-alert {
             border: 1px solid #e2e8f0;
@@ -132,7 +93,6 @@
           .math-link { color: #0ea5e9; font-weight: 600; text-decoration: none; border-bottom: 1.5px solid transparent; transition: border-color 0.2s; }
           .math-link:hover { border-color: #0ea5e9; }
           
-          /* High Contrast / Emphasis Mode styling */
           .high-contrast-mode .alert-due {
             background-color: #eff6ff;
             border-color: #bfdbfe;
@@ -151,8 +111,6 @@
         </style>
 
         <div class="agenda-grid" id="agenda-cards">
-          
-          <!-- Tuesday -->
           <div class="day-card">
             <h3 style="border-bottom: 2px solid #0ea5e9; padding-bottom: 8px; margin-bottom: 16px;">TUESDAY 1st</h3>
             <div class="day-tasks">
@@ -164,7 +122,6 @@
             </div>
           </div>
 
-          <!-- Wednesday -->
           <div class="day-card">
             <h3 style="border-bottom: 2px solid #0ea5e9; padding-bottom: 8px; margin-bottom: 16px;">WEDNESDAY 2nd</h3>
             <div class="day-tasks">
@@ -180,37 +137,32 @@
               </div>
             </div>
           </div>
-
         </div>
       </main>
     </div>
 
-    <!-- 3. 5TH GRADE LOCKED VIEW WITH TIMER & PDF -->
-    <div id="fifth-grade-view" class="app-view hidden">
+    <!-- 3. 5TH GRADE LOCKED VIEW WITH STUDY GUIDE CONTENT -->
+    <div id="fifth-grade-view" class="app-view hidden" style="display: flex; flex-direction: column; height: 100vh;">
       <header class="locked-header">
         <div class="brand">
           <strong>THE MAYAN SCHOOL</strong>
           <span>5TH GRADE MATH</span>
         </div>
-        <div class="controls">
+        
+        <div class="controls" style="display: flex; align-items: center; gap: 15px; margin-left: auto; margin-right: 20px;">
             <div class="segmented-control" style="background: rgba(0,0,0,0.2); border-color: rgba(255,255,255,0.2);">
-                <button id="btn-load-122" class="toggle-btn" style="color: white;" type="button">1.2.2</button>
-                <button id="btn-load-123" class="toggle-btn active" style="color: white;" type="button">1.2.3</button>
+                <button id="btn-load-122" class="toggle-btn active" style="color: white;" type="button">1.2.2</button>
+                <button id="btn-load-123" class="toggle-btn" style="color: white;" type="button">1.2.3</button>
             </div>
+            <button id="btn-start-5th-timer" class="fs-btn primary-btn" style="background-color: #3b82f6; border: none;">Start 30:00 Lockdown</button>
+            <div id="fifth-timer-display" class="timer" style="font-size: 1.5rem; font-family: monospace; font-weight: bold; color: white;">30:00</div> 
         </div>
-        <!-- 30 Min Timer -->
-        <div id="fifth-timer-display" class="timer">30:00</div> 
+        
         <button id="btn-exit-5th" class="fs-btn exit-btn" style="border-color: white; color: white;">Exit</button>
       </header>
-      <main id="fifth-grade-content" class="locked-content" style="padding: 24px; display: block; overflow: auto; background-color: #f1f5f9;">
-        <div style="background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); max-width: 600px; margin: 0 auto; text-align: center;">
-            <h2 style="color: #0f172a; margin-bottom: 10px;">Independent Work Session</h2>
-            <p style="color: #64748b; margin-bottom: 24px;">Do not switch tabs or minimize this window once the timer starts.</p>
-            
-            <button id="btn-start-5th-timer" class="fs-btn primary-btn" style="font-size: 1.1rem; padding: 12px 24px; margin-bottom: 16px; width: 100%;">Start 30:00 Timer & Lockdown</button>
-            <br>
-            <button id="btn-open-pdf" class="fs-btn" style="width: 100%; border: 2px solid #cbd5e1;">Open Study Guide PDF</button>
-        </div>
+      
+      <!-- Main Content Area: Injected via JS -->
+      <main id="fifth-grade-content" class="locked-content" style="flex-grow: 1; padding: 40px; background-color: #f8fafc; overflow-y: auto;">
       </main>
     </div>
 
@@ -266,7 +218,7 @@
       </main>
     </div>
 
-    <!-- 5. ADMIN LOCKDOWN MODAL (Existing) -->
+    <!-- 5. ADMIN LOCKDOWN MODAL -->
     <div id="admin-modal" class="modal-overlay hidden">
       <div class="modal-content">
         <h2>Device Locked</h2>
@@ -282,17 +234,7 @@
       </div>
     </div>
 
-    <!-- 6. PDF VIEWER MODAL -->
-    <div id="pdf-modal" class="pdf-modal-overlay">
-      <div class="pdf-modal-content">
-        <button id="btn-close-pdf" class="close-pdf-btn">&times;</button>
-        <iframe src="studyguide.pdf" width="100%" height="100%" style="border: none; flex-grow: 1;">
-            Your browser does not support PDFs. Please download the PDF to view it.
-        </iframe>
-      </div>
-    </div>
-
-    <!-- 7. STRICT RED LOCKDOWN OVERLAY (DOM Focus Lost) -->
+    <!-- 6. STRICT RED LOCKDOWN OVERLAY (DOM Focus Lost) -->
     <div id="strict-lockdown-overlay" class="lockdown-screen">
       <div class="lockdown-card">
         <h2>⚠️ SECURITY LOCKDOWN ⚠️</h2>
@@ -302,7 +244,6 @@
         <p id="strict-lockdown-error" style="color: #dc2626; display: none; margin-top: 10px; font-weight: bold;">Incorrect PIN.</p>
       </div>
     </div>
-
 
     <!-- Firebase Analytics Script -->
     <script type="module">
@@ -323,17 +264,14 @@
       const analytics = getAnalytics(app);
     </script>
 
-    <!-- Your existing main logic -->
     <script type="module" src="js/main.js"></script>
     
-    <!-- 5TH GRADE TIMER & LOCKDOWN LOGIC (Added inline to guarantee it works) -->
+    <!-- 5TH GRADE TIMER, LOCKDOWN, & CONTENT INJECTION -->
     <script>
-      // --- View Navigation Extensions ---
-      // (This works alongside whatever routing main.js is doing)
       const landingView = document.getElementById('landing-view');
       const fifthView = document.getElementById('fifth-grade-view');
-      const fourthView = document.getElementById('fourth-grade-view');
       
+      // --- Navigation ---
       document.getElementById('btn-nav-5th').addEventListener('click', () => {
         document.querySelectorAll('.app-view').forEach(v => {
             v.classList.remove('active');
@@ -348,16 +286,7 @@
         fifthView.classList.add('hidden');
         landingView.classList.remove('hidden');
         landingView.classList.add('active');
-        isFifthGradeSessionActive = false; // Turn off monitoring if they exit legitimately
-      });
-
-      // --- PDF Modal Logic ---
-      document.getElementById('btn-open-pdf').addEventListener('click', () => {
-        document.getElementById('pdf-modal').style.display = 'flex';
-      });
-      
-      document.getElementById('btn-close-pdf').addEventListener('click', () => {
-        document.getElementById('pdf-modal').style.display = 'none';
+        isFifthGradeSessionActive = false;
       });
 
       // --- Timer & Security Lockdown Logic ---
@@ -367,9 +296,9 @@
 
       document.getElementById('btn-start-5th-timer').addEventListener('click', (e) => {
         isFifthGradeSessionActive = true;
-        e.target.innerText = "Session Active - Do Not Leave Window";
-        e.target.style.backgroundColor = "#10b981"; // Turn green
-        e.target.disabled = true; // Prevent multiple clicks
+        e.target.innerText = "Session Active";
+        e.target.style.backgroundColor = "#10b981"; // Green
+        e.target.disabled = true;
 
         clearInterval(fifthTimerInterval);
         timeRemaining = 1800;
@@ -378,7 +307,7 @@
           if (timeRemaining <= 0) {
             clearInterval(fifthTimerInterval);
             document.getElementById('fifth-timer-display').innerText = "00:00";
-            isFifthGradeSessionActive = false; // Disable lockdown when time is up
+            isFifthGradeSessionActive = false; 
             alert("Time is up!");
             return;
           }
@@ -391,37 +320,126 @@
         }, 1000);
       });
 
-      // DOM Monitoring (Triggers Red Screen)
       function triggerStrictLockdown() {
         if (isFifthGradeSessionActive) {
           document.getElementById('strict-lockdown-overlay').style.display = 'flex';
         }
       }
 
-      // Check for tab switch / minimize
       document.addEventListener("visibilitychange", () => {
-        if (document.visibilityState === 'hidden') {
-          triggerStrictLockdown();
-        }
+        if (document.visibilityState === 'hidden') triggerStrictLockdown();
       });
 
-      // Check for clicking outside browser
       window.addEventListener("blur", () => {
         triggerStrictLockdown();
       });
 
-      // Unlock Screen with PIN 0801
       document.getElementById('btn-strict-unlock').addEventListener('click', () => {
         const pin = document.getElementById('strict-unlock-pin').value;
         const err = document.getElementById('strict-lockdown-error');
         
         if (pin === "0801") {
           document.getElementById('strict-lockdown-overlay').style.display = 'none';
-          document.getElementById('strict-unlock-pin').value = ''; // clear input
+          document.getElementById('strict-unlock-pin').value = ''; 
           err.style.display = 'none';
         } else {
           err.style.display = 'block';
         }
+      });
+
+      // --- Study Guide HTML Content Injection ---
+      const content122 = `
+        <div style="background: white; padding: 40px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); max-width: 800px; margin: 0 auto; color: #334155;">
+          <h1 style="color: #0ea5e9; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">Study Guide 1</h1>
+          <h3 style="margin-top: 20px;">Basic Operations Review</h3>
+          
+          <div style="margin-top: 30px;">
+            <h4 style="color: #475569;">Part 1: Find each sum or difference. Show your procedure.</h4>
+            <ol style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; line-height: 2;">
+              <li>3,683 + 2,784</li>
+              <li>3,450 + 14,853</li>
+              <li>987 + 63,489</li>
+              <li>4,773 + 3,480</li>
+              <li>877,213 - 473,436</li>
+              <li>96,291 - 87,454</li>
+              <li>95,000 - 47,698</li>
+              <li>85,400 - 86</li>
+              <li>874,566 - 989</li>
+            </ol>
+          </div>
+
+          <div style="margin-top: 40px;">
+            <h4 style="color: #475569;">Part 2: Find each product. Show your procedure.</h4>
+            <ol style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; line-height: 2;">
+              <li>438 &times; 7</li>
+              <li>949 &times; 24</li>
+              <li>4,596 &times; 71</li>
+              <li>9,807 &times; 78</li>
+              <li>784 &times; 68</li>
+              <li>7,457 &times; 65</li>
+            </ol>
+          </div>
+
+          <div style="margin-top: 40px;">
+            <h4 style="color: #475569;">Part 3: Find each quotient. Show your procedure.</h4>
+            <ol style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; line-height: 2;">
+              <li>448 &divide; 6</li>
+              <li>33,856 &divide; 7</li>
+              <li>20,016 &divide; 8</li>
+              <li>154 &divide; 5</li>
+              <li>785,626 &divide; 8</li>
+              <li>87,653 &divide; 9</li>
+            </ol>
+          </div>
+        </div>
+      `;
+
+      const content123 = `
+        <div style="background: white; padding: 40px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); max-width: 800px; margin: 0 auto; color: #334155;">
+          <h1 style="color: #0ea5e9; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">Study Guide 2</h1>
+          <h3 style="margin-top: 20px;">Expanded form & Standard form</h3>
+          
+          <div style="margin-top: 30px;">
+            <h4 style="color: #475569;">B. Write the following numbers in expanded form using powers of 10.</h4>
+            <ol style="display: grid; grid-template-columns: 1fr; gap: 20px; line-height: 2;">
+              <li>418.053</li>
+              <li>62.8</li>
+              <li>9.41</li>
+              <li>730.592</li>
+              <li>5.168</li>
+            </ol>
+          </div>
+
+          <div style="margin-top: 40px;">
+            <h4 style="color: #475569;">C. Write the following numbers in standard form.</h4>
+            <ol style="display: grid; grid-template-columns: 1fr; gap: 20px; line-height: 2;">
+              <li>200 + 10 + 6 + 0.3</li>
+              <li>4 + 0.9 + 0.008</li>
+              <li>(7 &times; 10) + (2 &times; 1/10) + (8 &times; 1/100) + (6 &times; 1/1000)</li>
+              <li>(4 &times; 100) + (2 &times; 10) + (6 &times; 1) + (1 &times; 1/100)</li>
+              <li>500 + 40 + 3 + 0.8</li>
+            </ol>
+          </div>
+        </div>
+      `;
+
+      const btn122 = document.getElementById('btn-load-122');
+      const btn123 = document.getElementById('btn-load-123');
+      const contentContainer = document.getElementById('fifth-grade-content');
+
+      // Load initial state
+      contentContainer.innerHTML = content122;
+
+      btn122.addEventListener('click', () => {
+          btn122.classList.add('active');
+          btn123.classList.remove('active');
+          contentContainer.innerHTML = content122;
+      });
+
+      btn123.addEventListener('click', () => {
+          btn123.classList.add('active');
+          btn122.classList.remove('active');
+          contentContainer.innerHTML = content123;
       });
     </script>
 
@@ -432,12 +450,8 @@
 
     <script>
       document.getElementById('btn-hard-reset').addEventListener('click', function() {
-        // Clear saved views or states
         localStorage.clear();
         sessionStorage.clear();
-        
-        // Force a fresh reload by appending a unique timestamp to the URL
-        // This tricks the mobile browser into ignoring the cached version
         window.location.href = window.location.pathname + '?refresh=' + new Date().getTime();
       });
     </script>
