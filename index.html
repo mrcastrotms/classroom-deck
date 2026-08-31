@@ -239,7 +239,7 @@
       <div class="lockdown-card">
         <h2>⚠️ SECURITY LOCKDOWN ⚠️</h2>
         <p>You left the active assignment window. Waiting for teacher override.</p>
-        <input type="password" id="strict-unlock-pin" placeholder="Enter PIN (0801)">
+        <input type="password" id="strict-unlock-pin" placeholder="Enter">
         <button id="btn-strict-unlock" class="fs-btn primary-btn">Unlock Screen</button>
         <p id="strict-lockdown-error" style="color: #dc2626; display: none; margin-top: 10px; font-weight: bold;">Incorrect PIN.</p>
       </div>
@@ -321,7 +321,7 @@
       // Unlock & Process Exit
       document.getElementById('btn-submit-pin').addEventListener('click', () => {
         const pin = document.getElementById('admin-pin-input').value;
-        if (pin === "0801") {
+        if (pin === "0922") {
             document.getElementById('admin-modal').classList.add('hidden');
             
             // Cleanly end session and return to Landing
